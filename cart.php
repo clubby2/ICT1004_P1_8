@@ -156,9 +156,10 @@ where a.UID = $userid GROUP BY b.item_id";
 
          }
 // show when
-       echo  '<form action="modal.php" method="post">
+       echo  '<form action="payment.php" method="post">
       <button type="submit" class="btn btn-primary btn-lg" name="toPayment">Payment</button>
         </form>';
+  
          $result->free_result();
            }
            else{

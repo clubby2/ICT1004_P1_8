@@ -48,7 +48,7 @@ echo $newitemid;
     if ($db->query($subsql) === TRUE) {
         echo "New record created successfully";
     } else {
-        echo "Error: " . $subsql . "<br>" . $conn->error;
+        echo "Error: " . $subsql . "<br>" . $db->error;
     }
 
     $db->close(); // done close it

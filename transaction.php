@@ -34,10 +34,11 @@
     <article>
         <div class="container-fluid">
             <h2>Transaction History</h2>
-        
-<?php 
+
+<?php
+$userid =$_SESSION['UID'];
 $num = 0;
-    $query = "SELECT HID, total_price, item_name, date_purchased FROM history_payment WHERE UID = '$_SESSION[login_user]' ORDER BY date_purchased DESC;";
+    $query = "SELECT HID, total_price, item_name, date_purchased FROM history_payment WHERE UID = '$userid' ORDER BY date_purchased DESC;";
     $result = mysqli_query($db, $query);
     if (mysqli_num_rows($result) == 0){
         mysqli_free_result($result);
@@ -56,7 +57,7 @@ $num = 0;
             $item = $row['item_name'];
             $total = $row['total_price'];
             $date = $row['date_purchased'];
-            
+
             echo "<tr><td>" . $num . "</td>";
             echo "<td>" . $item . "</td>";
             echo "<td>" . $total . "</td>";
@@ -65,7 +66,7 @@ $num = 0;
         mysqli_free_result($result);
         mysqli_close($db);
         echo "</tbody></table>";
-        
+
     }
 ?>
             <a href="index.php"/><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-home"> Home</span></button>

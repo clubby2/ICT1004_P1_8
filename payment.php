@@ -1,6 +1,36 @@
+
+<?php
+session_start();
+if (!isset($_SESSION['email'])) {
+header ('location:index.php');
+}
+if(isset($_POST['logout'])){
+header ('location:index.php');
+}
+if (isset($_POST['toPayment'])) {
+$userid=$_SESSION['UID'];
+require 'config.php';
+
+$idsql= "SELECT * FROM cart WHERE checks = 1 AND UID=$userid"; // query cart item and add
+  $sqlitem= mysqli_query($db,$idsql);
+  $checkitem = mysqli_fetch_assoc($sqlitem);
+  if (empty($checkitem)) {
+    echo '<script language="javascript">';
+    echo 'alert("Please check out an item!")';
+    echo '</script>';
+    header ('location:cart.php');
+   //echo '<input type="hidden" name="errorcart" value="">
+   //<small id="errorcart" class="form-text text-danger" hidden></small>  </form>';
+  }
+}
+
+
+ ?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+
     <meta charset="utf-8">
     <title>Payment</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,6 +56,7 @@
   </head>
   <body>
 <!---- header --->
+<?php  ?>
 <?php include "header.php" ?>
 <?php include "config.php" ?>
 
@@ -33,20 +64,23 @@
 <!--- content here --->
 <section>
     <article>
-        
+
 <?php
+
+
+$userid =$_SESSION['UID'];
     //query visa, master and address information from db
-    $visaquery = "SELECT * FROM payment WHERE UID='$_SESSION[login_user]' AND card_type='Visa'";
-    $masterquery = "SELECT * FROM payment WHERE UID='$_SESSION[login_user]' AND card_type='Mastercard'";
-    $addrquery = "SELECT address, postal_code FROM user WHERE UID='$_SESSION[login_user]'";
-    
+    $visaquery = "SELECT * FROM payment WHERE UID= $userid AND card_type='Visa'";
+    $masterquery = "SELECT * FROM payment WHERE UID= $userid AND card_type='Mastercard'";
+    $addrquery = "SELECT address, postal_code FROM user WHERE UID= $userid";
+
     $addrresult = mysqli_query($db, $addrquery);
     if(mysqli_num_rows($addrresult) > 0){
         $addressrow = mysqli_fetch_assoc($addrresult);
         $address = $addressrow['address'];
         $postal = $addressrow['postal_code'];
         mysqli_free_result($addrresult);
-        
+
     }
     $visaresult = mysqli_query($db, $visaquery);
     if(mysqli_num_rows($visaresult) > 0){
@@ -57,7 +91,7 @@
         $visaexpirydate = $visarow['card_expiry'];
         $visaCVV = $visarow['cvv'];
         mysqli_free_result($visaresult);
-        
+
     }
     $masterresult = mysqli_query($db, $masterquery);
     if(mysqli_num_rows($masterresult) > 0){
@@ -68,15 +102,15 @@
         $MCexpirydate = $masterrow['card_expiry'];
         $MCCVV = $masterrow['cvv'];
         mysqli_free_result($masterresult);
-        
+
     }
-    
+
     //if user updates or change card in the modal.
     if (isset($_POST['change']))
     {
         $type = $_POST['cardtype'];
         $visaquery = "SELECT * FROM payment WHERE UID='$_SESSION[login_user]' AND card_type='Visa'";
-        
+
         $visaresult = mysqli_query($db, $visaquery);
         if(mysqli_num_rows($visaresult) > 0){
             $visarow = mysqli_fetch_assoc($visaresult);
@@ -154,7 +188,7 @@
                 $visaCVV = $row['cvv'];
                 mysqli_free_result($visaresult);
             }
-            
+
             //if user has existing visa card
             if (!empty($visacard_type))
             {
@@ -197,7 +231,7 @@
             }
         }
     }
-    
+
     //check if address in database is empty
     if (empty($address)){
         echo "<div class='container-fluid'>";
@@ -211,7 +245,7 @@
         echo "<input type='text' name='code' id='code' class='form-control' placeholder='Postal Code' required><br>";
         echo "</div></div>";
     }
-    
+
     else{
         echo "<div class='container-fluid'>";
         echo "<form action='process_payment.php' method='POST'>";
@@ -246,32 +280,24 @@
         //if user only has visa card
         if(!empty($visacard_type))
         {
-
             echo "<div class='col-lg-6'>";
             echo "<div class='form-group'>";
             echo "<h2>Payment <a href='#changecardmodal' data-toggle='modal' data-target='#changecardmodal'><span class='glyphicon glyphicon-pencil'>Edit </span></a></h2>";
-
             echo "<label for='cards'>Selected Card: </label>";
-
             echo " <span class='fa fa-cc-visa' style='color:navy;'></span> ";
             echo "<span class='fa fa-cc-mastercard' style='color:black;'></span> ";
             echo "<select class='form-control' name='cardtype' id='cards'>";
             echo "<option value='Visa'>Visa</option>";
             echo "</select><br>";
-
             echo "<label class='form-check-label' for='cn'>Name on credit card: </label>";
             echo "<p>" . $visacardname . "</p>";
-
             echo "<label class='form-check-label' for='num'>Card Number (ending with): </label>";
             echo "<p>" . maskedCardNum($visacardnum) . "</p>";;
-
             echo "<label class='form-check-label' for='expire'>Expiry Date</label>";
             echo "<p>" . $visaexpirydate . "</p>";
-
             echo "<button type='submit' class='btn btn-primary'>Make Payment</button><br><br>";
             echo "<a href='cart.php'><button type='button' class='btn btn-danger'>Back</button></a>";
             echo "</div></div></form></div>";
-
         }
         else{
             //if user only has mastercard
@@ -279,24 +305,18 @@
                 echo "<div class='col-lg-6'>";
                 echo "<div class='form-group'>";
                 echo "<h2>Payment <a href='#changecardmodal' data-toggle='modal' data-target='#changecardmodal'><span class='glyphicon glyphicon-pencil'>Edit </span></a></h2>";
-
                 echo "<label for='cards'>Selected Card: </label>";
-
                 echo " <span class='fa fa-cc-visa' style='color:navy;'></span> ";
                 echo "<span class='fa fa-cc-mastercard' style='color:black;'></span> ";
                 echo "<select class='form-control' name='cardtype' id='cards'>";
                 echo "<option value='Mastercard'>Mastercard</option>";
                 echo "</select><br>";
-
                 echo "<label class='form-check-label' for='cn'>Name on credit card: </label>";
                 echo "<p>" . $MCcardname . "</p>";
-
                 echo "<label class='form-check-label' for='num'>Card Number: </label>";
                 echo "<p>" . maskedCardNum($MCcardnum) . "</p>";;
-
                 echo "<label class='form-check-label' for='expire'>Expiry Date</label>";
                 echo "<p>" . $MCexpirydate . "</p>";
-
                 echo "<button type='submit' class='btn btn-primary'>Make Payment</button><br><br>";
                 echo "<a href='cart.php'><button type='button' class='btn btn-danger'>Back</button></a>";
                 echo "</div></div></form></div>";
@@ -307,47 +327,39 @@
                 echo "<div class='col-lg-6'>";
                 echo "<div class='form-group'>";
                 echo "<h2>Payment</h2>";
-
                 echo "<label for='cards'>Accepted Cards: </label>";
                 echo " <span class='fa fa-cc-visa' style='color:navy;'></span> ";
                 echo "<span class='fa fa-cc-mastercard' style='color:black;'></span>";
-
                 echo "<select class='form-control' name='cardtype' id='cards'>";
                 echo "<option value='Visa'>Visa</option>";
                 echo "<option value='Mastercard'>MasterCard</option>";
                 echo "</select><br>";
-
                 echo "<label class='form-check-label' for='cn'>Name on credit card</label><br>";
                 echo "<input type='text' name='cardname' id='cn' class='form-control' placeholder='Full Name on Card' required><br>";
-
                 echo "<label class='form-check-label' for='num'>Card Number</label><br>";
                 echo "<input type='text' name='cardnum'id='num' class='form-control' placeholder='Card Number' required><br>";
-
                 echo "<label class='form-check-label' for='expire'>Expiry Date</label><br>";
                 echo "<input type='text' name='expiredate' id='expire' class='form-control' placeholder='MM/YY' required><br>";
-
                 echo "<label class='form-check-label' for='cvv'>CVV / CVC *</label><br>";
                 echo "<input type='password' name='cvv' id='cvv' class='form-control' placeholder='CVV' required><br>";
-
                 echo "<button type='submit' class='btn btn-primary'>Make Payment</button><br><br>";
                 echo "<a href='cart.php'><button type='button' class='btn btn-danger'>Back</button></a>";
                 echo "</div></div></form>";
             }
         }
     }
-    
+
 ?>
 
-<?php 
-            
+<?php
+
     function sanitize_input($data)
     {
         $data = trim($data);
         $data = stripslashes($data);
         $data = htmlspecialchars($data);
         return $data;
-    }    
-
+    }
     function maskedCardNum($ccnum){
     $masked =  str_pad(substr($ccnum, -4), strlen($ccnum), '*', STR_PAD_LEFT);
     return $masked;
@@ -368,7 +380,7 @@
                             <div class='col-lg-6'>
                                 <div class='form-group'>
                                     <label for='cards'>Accepted Cards: </label>
-                                    <span class='fa fa-cc-visa' style='color:navy;'></span> 
+                                    <span class='fa fa-cc-visa' style='color:navy;'></span>
                                     <span class='fa fa-cc-mastercard' style='color:black;'></span>
 
                                     <select class='form-control' name='cardtype' id='cards'>
@@ -402,4 +414,6 @@
 <!--- footer--->
 <?php include "footer.php" ?>
 <!--- end footer--->
+
+
 </html>

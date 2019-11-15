@@ -1,0 +1,10 @@
+/*Shin fei css*/
+input[type=email], input[type=password], input[type=text] {
+    border: 1px solid #d2d2d2;
+    font-size: 13px;
+    color: #747474;
+    padding: 8px 15px;
+    margin-right: 1%;
+    width: 100%;
+    box-sizing: border-box;
+}

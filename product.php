@@ -62,7 +62,7 @@
                     //$item_description=$row["item_description"];
                     //$item_features=$row["item_features"];
                     //echo $item_image;
-                    echo '<img src="'.$item_image.'" alt="#"/>';
+                    echo '<img src="'.$item_image.'" wdith="150"height="150" alt="#"/>';
                     echo  "<p>".$item_name."</p>";
 
                     echo'<button type="submit"  class="btn btn-warning" data-toggle="modal" data-target="#modal'.$item_id.'" >Add to Cart</button>
@@ -119,7 +119,7 @@
                        <div class="modal-body">
                            <div class="container-fluid">
                                <div class="row">
-                                   <img src="'.$item_image.'" alt="#"/>
+                                   <img src="'.$item_image.'" wdith="150"height="150" alt="#"/>
                                </div>
                                <div class="row">
                                    <div class="table">
@@ -200,7 +200,7 @@
                 $item_quantity=$row["item_quantity"];
                 //$item_description=$row["item_description"];
                 //$item_features=$row["item_features"];
-                echo '<img src="'.$item_image.'" alt="#" wdith="150px" height="150px"/>';
+                echo '<img src="'.$item_image.'" alt="#" wdith="150" height="150"/>';
                 echo  "<p>".$item_name."</p>";
                 echo'<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal'.$item_id.'" >Add to cart</button>
                 </a>
@@ -254,7 +254,7 @@ if ($result = mysqli_query($db, $sql)) {
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                            <img src="'.$item_image.'" alt="#"/>
+                            <img src="'.$item_image.'"wdith="150"height="150" alt="#"/>
                         </div>
                         <div class="row">
                             <div class="table">

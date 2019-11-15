@@ -31,7 +31,6 @@
 
 <!--- content here --->
 <?php
-//pattern='/^[0-9]{3}$/' CVV pattern
 $address = $postal = $card = $cardname = $cardnum = $expirydate = $CVV = "";
 $total = 0;
 $subtotal = 0;
@@ -60,7 +59,7 @@ $userid =$_SESSION['UID'];
                 $cardnum = sanitize_input($_POST["cardnum"]);
                 $expirydate = sanitize_input($_POST["expiredate"]);
                 $CVV = sanitize_input($_POST["cvv"]);
-                $payquery = "INSERT into payment (UID, card_name, card_number, cvv, card_expiry, card_type) VALUES ('$_SESSION[login_user]', '$cardname', '$cardnum', '$CVV', '$expirydate', '$cardtype')";
+                $payquery = "INSERT into payment (UID, card_name, card_number, cvv, card_expiry, card_type) VALUES ('$userid', '$cardname', '$cardnum', '$CVV', '$expirydate', '$cardtype')";
                 $addrquery = "UPDATE user SET address='$address', postal_code='$postal' WHERE UID=$userid";
 
                 //update card and address details in database
@@ -135,6 +134,8 @@ $userid =$_SESSION['UID'];
             echo "<td> $" . $subtotal . "</td></tr>";
             echo "</body></table><br>";
             mysqli_free_result($result);
+            $deletecart = "DELETE FROM cart WHERE UID = $userid AND checks='1'";
+            mysqli_query($db, $deletecart);
             mysqli_close($db);
 
 

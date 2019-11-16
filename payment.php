@@ -114,14 +114,7 @@ $userid =$_SESSION['UID'];
     if (isset($_POST['change']))
     {
         $type = sanitize_input($_POST['cardtype']);
-//        $visaquery = "SELECT * FROM payment WHERE UID=$userid AND card_type='Visa'";
-//
-//        $visaresult = mysqli_query($db, $visaquery);
-//        if(mysqli_num_rows($visaresult) > 0){
-//            $visarow = mysqli_fetch_assoc($visaresult);
-//            $visacard_type = $visarow['card_type'];
-//            mysqli_free_result($visaresult);
-//        }
+
         //if user select mastercard
         if ($type == 'Mastercard')
         {
@@ -356,35 +349,31 @@ $userid =$_SESSION['UID'];
         }
     }
             
-            
-            
-                
-                
                 
     //check if address in database is empty
     if (empty($address)){
         echo "<div class='container-fluid'>";
-        echo "<form action='process_payment.php' method='POST'>";
+        echo "<form action='process_payment.php' method='POST' onsubmit='return validateAddrForm()'>";
         echo "<div class='col-lg-6'>";
         echo "<div class='form-group'>";
         echo "<h2>Billing Address</h2>";
         echo "<label class='form-check-label' for='address'>Street Address</label><br>";
-        echo "<input type='text' name='address' id='address' class='form-control' placeholder='Street address, P.O box, unit, floor' required><br>";
+        echo "<input type='text' name='address' id='address' class='form-control' placeholder='Street address, P.O box, unit, floor' pattern='[A-Za-z0-9\-\(\)#@(\) ]+' required><br>";
         echo "<label class='form-check-label' for='code'>Postal Code</label><br>";
-        echo "<input type='text' name='code' id='code' class='form-control' placeholder='Postal Code' required><br>";
+        echo "<input type='text' name='code' id='code' class='form-control' placeholder='Postal Code' pattern='[0-9]{5,6}' required><br>";
         echo "</div></div>";
     }
 
     else{
         echo "<div class='container-fluid'>";
-        echo "<form action='process_payment.php' method='POST'>";
+        echo "<form action='process_payment.php' method='POST' onsubmit='return validateAddrForm()'>";
         echo "<div class='col-lg-6'>";
         echo "<div class='form-group'>";
         echo "<h2>Billing Address</h2>";
         echo "<label class='form-check-label' for='address'>Street Address: </label>";
-        echo "<input type='text' name='address' id='address' class='form-control' value='". $address . "' placeholder='Street address, P.O box, unit, floor' required><br>";
+        echo "<input type='text' name='address' id='address' class='form-control' value='". $address . "' placeholder='Street address, P.O box, unit, floor' pattern='[A-Za-z0-9\-\(\)#@(\) ]+' required><br>";
         echo "<label class='form-check-label' for='code'>Postal Code: </label>";
-        echo "<input type='text' name='code' id='code' class='form-control' value='". $postal . "' placeholder='Postal Code' required><br>";
+        echo "<input type='text' name='code' id='code' class='form-control' value='". $postal . "' placeholder='Postal Code' pattern='[0-9]{5,6}' required><br>";
         echo "</div></div>";
     }
     //if user has two existing cards in database
@@ -466,11 +455,11 @@ $userid =$_SESSION['UID'];
                 echo "<label class='form-check-label' for='cn'>Name on credit card*</label><br>";
                 echo "<input type='text' name='cardname' id='cn' class='form-control' placeholder='Full Name on Card' required><br>";
                 echo "<label class='form-check-label' for='num'>Card Number*</label><br>";
-                echo "<input type='text' name='cardnum'id='num' class='form-control' placeholder='Card Number' required><br>";
+                echo "<input type='text' name='cardnum'id='num' class='form-control' placeholder='Card Number' pattern = '4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11}' required><br>";
                 echo "<label class='form-check-label' for='expire'>Expiry Date*</label><br>";
-                echo "<input type='text' name='expiredate' id='expire' class='form-control' placeholder='MM/YY' required><br>";
+                echo "<input type='text' name='expiredate' id='expire' class='form-control' placeholder='MM/YY' pattern = '(0[1-9]|1[012])[/]([2-9][0-9])' required><br>";
                 echo "<label class='form-check-label' for='cvv'>CVV / CVC*</label><br>";
-                echo "<input type='password' name='cvv' id='cvv' class='form-control' placeholder='CVV' required><br>";
+                echo "<input type='password' name='cvv' id='cvv' class='form-control' placeholder='CVV' pattern = '(?!000)[0-9]{3}' required><br>";
                 echo "<button type='submit' class='btn btn-primary' name='pay'>Make Payment</button><br><br>";
                 echo "<a href='cart.php'><button type='button' class='btn btn-danger'>Back</button></a>";
                 echo "</div></div></form>";
@@ -521,13 +510,13 @@ $userid =$_SESSION['UID'];
                                     <input type='text' name='cardname' id='cn' class='form-control' placeholder='Full Name on Card' required><br>
 
                                     <label class='form-check-label' for='num'>Card Number</label><br>
-                                    <input type='text' name='cardnum'id='num' class='form-control' placeholder='Card Number' required><br>
+                                    <input type='text' name='cardnum'id='num' class='form-control' placeholder='Card Number' pattern = '4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11}' required><br>
 
                                     <label class='form-check-label' for='expire'>Expiry Date</label><br>
-                                    <input type='text' name='expiredate' id='expire' class='form-control' placeholder='MM/YY' required><br>
+                                    <input type='text' name='expiredate' id='expire' class='form-control' placeholder='MM/YY' pattern = '(0[1-9]|1[012])[/]([2-9][0-9])' required><br>
 
                                     <label class='form-check-label' for='cvv'>CVV / CVC *</label><br>
-                                    <input type='password' name='cvv' id='cvv' class='form-control' placeholder='CVV' required><br>
+                                    <input type='password' name='cvv' id='cvv' class='form-control' placeholder='CVV' pattern = '(?!000)[0-9]{3}' required><br>
                                     <button type='submit' name='change' class='btn btn-primary'>Change</button><br><br>
                                 </div>
                             </div>

@@ -43,7 +43,7 @@ $total = 0;
 $subtotal = 0;
 $date = date("Y-m-d");
 $errorMsg = "";
-$success = false;
+$success = true;
 $userid =$_SESSION['UID'];
     if (empty(sanitize_input($_POST["address"])) || empty(sanitize_input($_POST["code"])))
     {
@@ -52,8 +52,16 @@ $userid =$_SESSION['UID'];
     else
     {
         $address = sanitize_input($_POST["address"]);
+            if (!preg_match("/^[A-Za-z0-9\-\(\)#@(\) ]+$/", $address)) {
+            $errorMsg .= "Invalid address format. <br>";
+            $success = false;
+        }
         $postal = sanitize_input($_POST["code"]);
-        $cardtype = $_POST['cardtype'];
+            if (!preg_match("/^[1-9][0-9]{5}$/", $postal)) {
+            $errorMsg .= "Invalid postal code format. <br>";
+            $success = false;
+        }
+        //$cardtype = $_POST['cardtype'];
         if ((isset($_POST["cardname"])))
         {
             if (empty(sanitize_input($_POST["cardname"])) || empty(sanitize_input($_POST["cardnum"])) || empty(sanitize_input($_POST["expiredate"])) || empty(sanitize_input($_POST["cvv"])))
@@ -62,39 +70,36 @@ $userid =$_SESSION['UID'];
             }
             else
             {
+                $cardtype = sanitize_input($_POST["cardtype"]);
                 $cardname = sanitize_input($_POST["cardname"]);
                 $cardnum = sanitize_input($_POST["cardnum"]);
+                if ($cardtype == "Visa") {
+                    if (!preg_match("/^([4]{1})([0-9]{12,15})$/", $cardnum)) {
+                        $errorMsg .= "Visa card invalid. Please ensure that you have entered the correct format. <br>";
+                        $success = false;
+                    }
+                }
+                else if ($cardtype == "Mastercard") {
+                    if (!preg_match("/^5[1-5][0-9]{14}$|^2(?:2(?:2[1-9]|[3-9][0-9])|[3-6][0-9][0-9]|7(?:[01][0-9]|20))[0-9]{12}$/", $cardnum)) {
+                        $errorMsg .= "Mastercard invalid. Please ensure that you have entered the correct format. <br>";
+                        $success = false;
+                    }
+                }
                 $expirydate = sanitize_input($_POST["expiredate"]);
+                if (!preg_match("/^(0[1-9]|1[012]).([2-9][0-9])+$/", $expirydate)) {
+                    $errorMsg .= "Expiry date is invalid. Please input the correct format MM/YY. <br>";
+                    $success = false;
+                }
                 $CVV = sanitize_input($_POST["cvv"]);
-                $payquery = "INSERT into payment (UID, card_name, card_number, cvv, card_expiry, card_type) VALUES ('$userid', '$cardname', '$cardnum', '$CVV', '$expirydate', '$cardtype')";
-                $addrquery = "UPDATE user SET address='$address', postal_code='$postal' WHERE UID=$userid";
-
-                //update card and address details in database
-                if (mysqli_query($db, $payquery))
-                {
-                    echo "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Card saved successfully! </div>";
-                    $success = true;
-                }
-                else{
-                    echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Transaction unsuccessful! </div>";
-                    $success = false;
-
-                }
-
-                if (mysqli_query($db, $addrquery))
-                {
-                    echo "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Card saved successfully! </div>";
-                }
-                else{
-                    echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Error, unsuccessful! </div>";
+                if (!preg_match("/^(?!000)[0-9]{3}$/", $CVV)) {
+                    $errorMsg .= "CVV code is invalid. Please ensure cvv code only contains 3 digits <br>";
                     $success = false;
                 }
-
             }
         }
         else
         {
-            //select card details based on select option ($card type)
+            //if there is credit card stored, just need to update the address.
             $addrquery = "UPDATE user SET address='$address', postal_code='$postal' WHERE UID=$userid";
             if (mysqli_query($db, $addrquery))
             {
@@ -106,8 +111,26 @@ $userid =$_SESSION['UID'];
             }
         }
     }
+    
     if ($success)
     {
+        $payquery = "INSERT into payment (UID, card_name, card_number, cvv, card_expiry, card_type) VALUES ('$userid', '$cardname', '$cardnum', '$CVV', '$expirydate', '$cardtype')";
+        $addrquery = "UPDATE user SET address='$address', postal_code='$postal' WHERE UID=$userid";
+        //update card and address details in database
+        if (mysqli_query($db, $payquery))
+        {
+            echo "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Card saved successfully! </div>";
+
+        }
+        else{
+            echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Transaction unsuccessful! </div>";
+        }
+
+        if (!(mysqli_query($db, $addrquery)))
+        {
+            echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Error, unsuccessful! </div>";
+        }
+        
         //get relevant data from cart and add to history payment table.
         $query = "SELECT * FROM cart WHERE UID=$userid AND checks='1'";
         $result = mysqli_query($db, $query);

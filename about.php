@@ -62,7 +62,7 @@
        <div class="flip-card-back">
            <h2><i>Brandon</i></h2>
          <p>Software Engineering</p>
-         <a style="color:white" href="mailto:xxxxx@singaporetech.edu.sg">xxxxxx@<br>singaporetech.edu.sg</a>
+         <a style="color:white" href="mailto:1902694@singaporetech.edu.sg">1902694@<br>singaporetech.edu.sg</a>
        </div>
      </div>
    </div>
@@ -80,7 +80,7 @@
        <div class="flip-card-back">
            <h2><i>Derek</i></h2>
          <p>Information Security</p>
-         <a style="color:white" href="mailto:xxxxx@singaporetech.edu.sg">xxxxxx@<br>singaporetech.edu.sg</a>
+         <a style="color:white" href="mailto:1902139@singaporetech.edu.sg">1902139@<br>singaporetech.edu.sg</a>
        </div>
      </div>
    </div>
@@ -100,7 +100,7 @@
        <div class="flip-card-back">
            <h2><i>Guan Tsin</i></h2>
          <p>Cyber Security</p>
-         <a style="color:white" href="mailto:xxxxx@singaporetech.edu.sg">xxxxxx@<br>singaporetech.edu.sg</a>
+         <a style="color:white" href="mailto:1902953@singaporetech.edu.sg">1902953@<br>singaporetech.edu.sg</a>
        </div>
      </div>
    </div>
@@ -118,7 +118,7 @@
        <div class="flip-card-back">
            <h2><i>Sinn Fei</i></h2>
          <p>Information Security</p>
-         <a style="color:white" href="mailto:xxxxx@singaporetech.edu.sg">xxxxxx@<br>singaporetech.edu.sg</a>
+         <a style="color:white" href="mailto:1902162@singaporetech.edu.sg">1902162@<br>singaporetech.edu.sg</a>
        </div>
      </div>
    </div>

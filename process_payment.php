@@ -25,6 +25,13 @@
   </head>
   <body>
 
+<?php
+    //cannot directly access process payment page without clicking pay button in payment page
+    if (!isset($_POST['pay'])) {
+    header ('location:index.php');
+    exit();
+    }
+?>
 <!---- header --->
 <?php include "header.php" ?>
 <?php include "config.php" ?>

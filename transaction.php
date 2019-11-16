@@ -60,7 +60,7 @@ $num = 0;
 
             echo "<tr><td>" . $num . "</td>";
             echo "<td>" . $item . "</td>";
-            echo "<td>" . $total . "</td>";
+            echo "<td>$" . $total . "</td>";
             echo "<td>" . $date . "</td></tr>";
         }
         mysqli_free_result($result);

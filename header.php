@@ -82,6 +82,7 @@ unset($_SESSION['UID']);
      <ul class="dropdown-menu">
 
        <li><a href="userprofile.php">Profile</a></li>
+       <li><a href="transaction.php">Transaction History</a></li>
        <?php if (!empty($_SESSION['role'])) { ?>
        <li><a href="productlist.php">Admin Product</a></li>
      <?php } ?>

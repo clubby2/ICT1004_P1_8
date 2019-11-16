@@ -33,7 +33,7 @@
         include "config.php"
         ?>
 
-        <!--- content here --->
+        <!-- content here -->
         <article class="container">
 
             <section class="col-md-3">
@@ -118,11 +118,11 @@
                     } else {
                         echo "<form name = 'myCardForm' action = 'process_card.php' method = 'post' onsubmit = 'return validateCardForm()'>";
                         echo "<div class = 'form-group'>";
-                        echo "<label for = 'text'>Name on card*</label>";
+                        echo "<label for = 'cardName'>Name on card*</label>";
                         echo "<input class = 'form-control' type = 'text' id = 'cardName' name = 'cardName' placeholder = 'Full name on card' pattern = '^[a-zA-Z ]*$' required/>";
                         echo "</div>";
                         echo "<div class = 'form-group'>";
-                        echo "<label for = 'text'Card Type* </label>";
+                        echo "<label for = 'selectCards'Card Type* </label>";
                         echo "<span class = 'fa fa-cc-visa' style = 'color:navy;'></span>";
                         echo "<span class = 'fa fa-cc-mastercard' style = 'color:black;'></span>";
 
@@ -145,7 +145,7 @@
                         })
                         </script>";
                         echo "<div class = 'form-group'>";
-                        echo "<label for = 'text'>Card Number*</label>";
+                        echo "<label for = 'cardNum'>Card Number*</label>";
                         echo "<section class = 'input-group'>";
                         echo "<input class = 'form-control' type = 'text' id = 'cardNum' name = 'cardNum' placeholder = 'Card Number' pattern = '4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11}' required/>";
 
@@ -158,13 +158,13 @@
                         echo "<div class = 'row'>";
                         echo "<div class = 'col-md-3'>";
                         echo "<div class = 'form-group'>";
-                        echo "<label for = 'text'>Expiry Date*</label>";
+                        echo "<label for = 'expDate'>Expiry Date*</label>";
                         echo "<input class = 'form-control' type = 'text' id = 'expDate' name = 'expDate' placeholder = 'MM/YY' pattern = '(0[1-9]|1[012])[/]([2-9][0-9])' required />";
                         echo "</div>";
                         echo "</div>";
                         echo "<div class = 'col-md-3'";
                         echo "<div class = 'form-group'>";
-                        echo "<label for = 'text'>CVV*</label>";
+                        echo "<label for = 'cvc'>CVV*</label>";
                         echo "<input class = 'form-control' type = 'text' id = 'cvc' name = 'cvc' placeholder = 'CVV' pattern = '(?!000)[0-9]{3}' required/>";
                         echo "</div>";
                         echo "</div>";
@@ -206,27 +206,26 @@
                     <h3>Shipping Address</h3><hr class="line">
                     <form name="myAddrForm" action="process_address.php" method="post" onsubmit="return validateAddrForm()">
                         <p class="form-group">
-                            <label for="text">Street Address*</label>
+                            <label for="addr">Street Address*</label>
                             <?php echo "<input class='form-control' type='text' id='addr' name='addr' placeholder='Street address, P.O box, unit, floor' value='" . $addr . "' pattern='[A-Za-z0-9\-\(\)#@(\) ]+' required/>"; ?>
                         </p>
 
                         <p class="form-group">
-                            <label for="text">Postal Code*</label>
+                            <label for="postalcode">Postal Code*</label>
                             <?php echo "<input class='form-control' type='text' id='postalcode' name='postalcode' placeholder='######' value='" . $postalcode . "' pattern='[0-9]{5,6}' required/>"; ?>
                         </p>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>
                     <br>
                     <p>* required</p>
-                    </form>
                 </section>
             </article>
             <div class=col-md-3></div>
-        </article><!--
+        </article>
 
-        <!--- footer--->
+        <!-- footer-->
         <?php include "footer.php" ?>
-        <!--- end footer--->
+        <!-- end footer-->
 
 
 

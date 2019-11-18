@@ -77,11 +77,9 @@ header('Location:index.php');
          <?php
           require 'config.php';
             $sql = "SELECT * FROM item ";
-
             if ($result = mysqli_query($db, $sql)) {
               if(mysqli_num_rows($result) > 0){
                while ($row = mysqli_fetch_array($result)) {
-
                   echo '<div class="col-lg-4 text-center">';
                           //  echo $row["item_name"];
                   $item_id=$row["item_id"];
@@ -94,17 +92,14 @@ header('Location:index.php');
                   //$item_features=$row["item_features"];
                   //echo $item_image;
                     echo'<tr>
-
                     <td>'.$item_name.'</td>
                     <td>$'.$item_price.'</td>
                     <td>'.$item_quantity.'</td>
                     <td>'.$item_category.'</td>
                     <td>';
-
                     echo'<a class="btn btn-sm btn-danger"name="delproducts" data-toggle="modal" data-target="#delModalproduct'.$item_id.'">Delete</a>
                     </td>
                 </tr>';
-
                 echo'<div class="modal fade" id="delModalproduct'.$item_id.'">';
                    echo  '<form action="modal.php" method="post">';
                      echo '<input type="hidden" name="getitemid" value="'.$item_id.' " readonly>';
@@ -116,7 +111,6 @@ header('Location:index.php');
                                  <h1 class="modal-title">Removing Item </h1>
                              </div>
                          <div class="modal-body ">
-
                          <h3>Do you want to remove '.$item_name.'? </h3>
                            <div class="modal-footer">
                                <button type="submit"name="delproducts" class="btn btn-danger text-center">Remove</button>
@@ -146,11 +140,14 @@ header('Location:index.php');
        </main>
      </div>
    </div>
+   </div>
+
    <!--- customer div--->
+      <div class="container-fluid">
    <div class="row" id="adminCustomers" style="display:none;">
 
        <div class="row">
-        <div class="col-lg-10 "style="padding-left: 30px;">
+        <div class="col-lg-10" >
 
           <h2>Customers</h2>
         </div>
@@ -163,7 +160,7 @@ header('Location:index.php');
 
                <th>Name</th>
                <th>Email</th>
-               <th>/item</th>
+               <th>item</th>
                <th>Price</th>
                <th>total_price</th>
                <th>date_purchase</th>
@@ -176,7 +173,6 @@ FROM history_payment a left join user b on a.UID =b.UID";
           if ($result = mysqli_query($db, $sqlcustomer)) {
             if(mysqli_num_rows($result) > 0){
               while ($row = mysqli_fetch_array($result)) {
-
                 echo '<div class="col-lg-4 text-center">';
                       //echo $row["item_name"];
                       $name=$row["first_name"];
@@ -185,7 +181,6 @@ FROM history_payment a left join user b on a.UID =b.UID";
                       $item_price=$row["item_price"];
                       $item_total=$row["total_price"];
                       $item_date=$row["date_purchased"];
-
                         echo'<tr>
                         <td>'.$name.'</td>
                         <td>'.$item_email.'</td>
@@ -193,10 +188,7 @@ FROM history_payment a left join user b on a.UID =b.UID";
                         <td>'.$item_price.'</td>
                         <td>'.$item_total.'</td>
                         <td>'.$item_date.'</td>
-
                         </tr>';
-
-
                            }
                            $result->free_result();
                            }
@@ -216,7 +208,7 @@ FROM history_payment a left join user b on a.UID =b.UID";
 
 
 </div>
-
+   </div>
    <!-- Add Product Modal start -->
    <div class="modal fade" id="add_product_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
      <div class="modal-dialog" role="document">
@@ -288,15 +280,15 @@ FROM history_payment a left join user b on a.UID =b.UID";
    </div>
    <!-- Add Product Modal end -->
 
-   
-   
-   
-   
-   
 
-   
-   
-   
+
+
+
+
+
+
+
+
 
    <!--- footer--->
   <?php include "footer.php" ?>

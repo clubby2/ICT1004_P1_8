@@ -1,3 +1,11 @@
+<?php
+session_start();
+if(!isset($_SESSION['email'])){
+  header ('location:index.php');
+}
+
+ ?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -57,7 +65,6 @@ $num = 0;
             $item = $row['item_name'];
             $total = $row['total_price'];
             $date = $row['date_purchased'];
-
             echo "<tr><td>" . $num . "</td>";
             echo "<td>" . $item . "</td>";
             echo "<td>$" . $total . "</td>";
@@ -66,7 +73,6 @@ $num = 0;
         mysqli_free_result($result);
         mysqli_close($db);
         echo "</tbody></table>";
-
     }
 ?>
             <a href="index.php"/><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-home"> Home</span></button>

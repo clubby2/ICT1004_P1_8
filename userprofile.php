@@ -1,3 +1,11 @@
+<?php
+session_start();
+if(!isset($_SESSION['email'])){
+  header ('location:index.php');
+}
+
+ ?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
     <head>
@@ -30,7 +38,7 @@
     <body>
         <?php
         include "header.php";
-        include "config.php"
+        include "config.php";
         ?>
 
         <!-- content here -->
@@ -81,7 +89,7 @@
                         <button type="submit" class="btn btn-primary" name="save_account_details" value="Save changes">Save changes</button>
                     </form>
                 </section>
-                
+
                 <!--Sinn Fei's Part-->
                 <section id="paymentnshipping" name="pymtNshipping" class="tab-pane fade">
                     <h3>Credit/Debit Card</h3><hr class="line">
@@ -90,16 +98,13 @@
                         $masked = str_pad(substr($ccnum, -4), strlen($ccnum), '*', STR_PAD_LEFT);
                         return $masked;
                     }
-
                     $query = "SELECT address, postal_code FROM p1_8.user WHERE UID='$_SESSION[UID]'";
                     $result = mysqli_query($db, $query);
-
                     if (mysqli_num_rows($result) > 0) {
                         $row = mysqli_fetch_assoc($result);
                         $addr = $row['address'];
                         $postalcode = $row['postal_code'];
                     }
-
                     $query2 = "SELECT * FROM p1_8.payment WHERE UID='$_SESSION[UID]'";
                     $result2 = mysqli_query($db, $query2);
                     if (mysqli_num_rows($result2) > 0) {
@@ -108,7 +113,6 @@
                         $cardNum = $row2['card_number'];
                         $expDate = $row2['card_expiry'];
                         $cardtype = $row2['card_type'];
-
                         echo "<section id='cardDetails'>";
                         echo "<h5>Name on card: " . $cardName . "</h5>";
                         echo "<h5>Card Type: " . $cardtype . "</h5>";
@@ -125,7 +129,6 @@
                         echo "<label for = 'selectCards'Card Type* </label>";
                         echo "<span class = 'fa fa-cc-visa' style = 'color:navy;'></span>";
                         echo "<span class = 'fa fa-cc-mastercard' style = 'color:black;'></span>";
-
                         echo "<select class = 'form-control' name = 'cardtype' id = 'selectCards'>";
                         echo "<option value = 'Visa'>Visa</option>";
                         echo "<option value = 'Mastercard'>MasterCard</option>";
@@ -135,12 +138,9 @@
                         var classes = {
                             Visa: 'fa-cc-visa', Mastercard: 'fa-cc-mastercard'
                         };
-
                         $('#selectCards').on('change', function () {
                         var value = $(this) . val();
-
                         $('#cardIcon i') . attr('class', '');
-
                         $('#cardIcon i') . addClass('fa' . addClass(classes[value]);
                         })
                         </script>";
@@ -148,13 +148,11 @@
                         echo "<label for = 'cardNum'>Card Number*</label>";
                         echo "<section class = 'input-group'>";
                         echo "<input class = 'form-control' type = 'text' id = 'cardNum' name = 'cardNum' placeholder = 'Card Number' pattern = '4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11}' required/>";
-
                         echo "<section class = 'input-group-addon'>";
                         echo "<span id = 'cardIcon' class = 'icon'><i class = 'fa fa-cc-visa'></i></span>";
                         echo "</section>";
                         echo "</section>";
                         echo "</div>";
-
                         echo "<div class = 'row'>";
                         echo "<div class = 'col-md-3'>";
                         echo "<div class = 'form-group'>";

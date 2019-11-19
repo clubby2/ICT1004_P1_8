@@ -1,3 +1,24 @@
+<?php
+
+session_start();
+if (isset($_POST['toPayment'])) {
+$userid=$_SESSION['UID'];
+require 'config.php';
+
+$idsql= "SELECT * FROM cart WHERE checks = 1 AND UID=$userid"; // query cart item and add
+  $sqlitem= mysqli_query($db,$idsql);
+  $checkitem = mysqli_fetch_assoc($sqlitem);
+  //echo $idsql;
+  //exit;
+  if (empty($checkitem)) {
+    echo '<script language="javascript">';
+   echo 'alert("Please check out an item!")</script>';
+      header ('location:cart.php');
+  }
+}
+
+ ?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -21,7 +42,7 @@
 <link rel="stylesheet" href="plugins/iCheck/square/blue.css">
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">  </script>
-    
+
     <script src="js/index.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   </head>
@@ -31,6 +52,16 @@
 include "header.php";
 include "config.php";
 include "encrypt.php";
+
+if(isset($_POST['logout'])){
+  //session_start();
+//  echo "HALLLLLO";
+session_destroy();
+unset($_SESSION['email']);
+unset($_SESSION['role']);
+unset($_SESSION['UID']);
+//header('Location:index.php');
+}
 ?>
 <!-- content here -->
 <section>
@@ -39,25 +70,8 @@ include "encrypt.php";
             <form action='process_payment.php' method='POST' onsubmit='return validateAddrForm()'>
 <?php
 
-if (!isset($_SESSION['email'])) {
-header ('location:index.php');
-}
-if(isset($_POST['logout'])){
-header ('location:index.php');
-}
-if (isset($_POST['toPayment'])) {
-$userid=$_SESSION['UID'];
-require 'config.php';
 
-$idsql= "SELECT * FROM cart WHERE checks = 1 AND UID=$userid"; // query cart item and add
-  $sqlitem= mysqli_query($db,$idsql);
-  $checkitem = mysqli_fetch_assoc($sqlitem);
-  if (empty($checkitem)) {
-    echo '<script language="javascript">';
-    echo 'alert("Please check out an item!")</script>';
-    header ('location:cart.php');
-  }
-}
+
 
 $success = true;
 $insertvisa = false;
@@ -117,16 +131,16 @@ $userid =$_SESSION['UID'];
                 $Mcardname = sanitize_input($_POST['cardname']);
                 $Mcardnum = sanitize_input($_POST['cardnum']);
                 $Mexpirydate = sanitize_input($_POST['expiredate']);
-                
+
                 if (empty($Mcardname) || empty($Mcardnum) || empty($Mexpirydate))
                 {
                     echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Please fill in all fields! </div>";
                     $success = false;
-                    
+
                 }
                 else
                 {
-                    if (!preg_match("/^5[1-5][0-9]{14}$|^2(?:2(?:2[1-9]|[3-9][0-9])|[3-6][0-9][0-9]|7(?:[01][0-9]|20))[0-9]{12}$/", $Mcardnum)) 
+                    if (!preg_match("/^5[1-5][0-9]{14}$|^2(?:2(?:2[1-9]|[3-9][0-9])|[3-6][0-9][0-9]|7(?:[01][0-9]|20))[0-9]{12}$/", $Mcardnum))
                     {
                         $errorMsg .= "Invalid Card Number<br>";
                         $success = false;
@@ -134,7 +148,7 @@ $userid =$_SESSION['UID'];
                     else{
                         $Mcardnum = maskedCardNum($Mcardnum);
                         $Mcardnum = encrypt($Mcardnum, $encryptionkey);
-                        
+
                     }
                     if (!preg_match("/^(0[1-9]|1[012]).([2-9][0-9])+$/", $Mexpirydate))
                     {
@@ -143,9 +157,9 @@ $userid =$_SESSION['UID'];
                     }
                     else{
                         $updatemaster = true;
-                        
+
                     }
-//                    if (!preg_match("/^(?!000)[0-9]{3}$/", $MCVV)) 
+//                    if (!preg_match("/^(?!000)[0-9]{3}$/", $MCVV))
 //                    {
 //                        $errorMsg .= "Invalid CVV<br>";
 //                        $success = false;
@@ -159,7 +173,7 @@ $userid =$_SESSION['UID'];
                             $masterresult = mysqli_query($db, $masterquery);
                             if(mysqli_num_rows($masterresult) > 0){
                                 $row = mysqli_fetch_assoc($masterresult);
-                                $MCcard_type = $row['card_type'];
+                                $mastercard_type = $row['card_type'];
                                 $MCcardname = $row['card_name'];
                                 $MCcardnum = $row['card_number'];
                                 $MCcardnum = decrypt($MCcardnum, $encryptionkey);
@@ -167,7 +181,7 @@ $userid =$_SESSION['UID'];
                                 mysqli_free_result($masterresult);
                                 mysqli_close($db);
                             }
-                        } 
+                        }
                         else {
                             echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Error! </div>";
                         }
@@ -186,7 +200,7 @@ $userid =$_SESSION['UID'];
                 }
                 else
                 {
-                    if (!preg_match("/^5[1-5][0-9]{14}$|^2(?:2(?:2[1-9]|[3-9][0-9])|[3-6][0-9][0-9]|7(?:[01][0-9]|20))[0-9]{12}$/", $Mcardnum)) 
+                    if (!preg_match("/^5[1-5][0-9]{14}$|^2(?:2(?:2[1-9]|[3-9][0-9])|[3-6][0-9][0-9]|7(?:[01][0-9]|20))[0-9]{12}$/", $Mcardnum))
                     {
                         $errorMsg .= "Invalid Card Number<br>";
                         $success = false;
@@ -194,7 +208,7 @@ $userid =$_SESSION['UID'];
                     else{
                         $Mcardnum = maskedCardNum($Mcardnum);
                         $Mcardnum = encrypt($Mcardnum, $encryptionkey);
-                        
+
                     }
                     if (!preg_match("/^(0[1-9]|1[012]).([2-9][0-9])+$/", $Mexpirydate))
                     {
@@ -204,7 +218,7 @@ $userid =$_SESSION['UID'];
                     else{
                         $insertmaster = true;
                     }
-//                    if (!preg_match("/^(?!000)[0-9]{3}$/", $MCVV)) 
+//                    if (!preg_match("/^(?!000)[0-9]{3}$/", $MCVV))
 //                    {
 //                        $errorMsg .= "Invalid CVV<br>";
 //                        $success = false;
@@ -217,7 +231,7 @@ $userid =$_SESSION['UID'];
                             $masterresult = mysqli_query($db, $masterquery);
                             if(mysqli_num_rows($masterresult) > 0){
                                 $row = mysqli_fetch_assoc($masterresult);
-                                $MCcard_type = $row['card_type'];
+                                $mastercard_type = $row['card_type'];
                                 $MCcardname = $row['card_name'];
                                 $MCcardnum = $row['card_number'];
                                 $MCcardnum = decrypt($MCcardnum, $encryptionkey);
@@ -225,7 +239,7 @@ $userid =$_SESSION['UID'];
                                 mysqli_free_result($masterresult);
                                 mysqli_close($db);
                             }
-                        } 
+                        }
                         else {
                             echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Error! </div>";
                         }
@@ -245,7 +259,7 @@ $userid =$_SESSION['UID'];
                 {
                     echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Please fill in all fields! </div>";
                     $success = false;
-                    
+
                 }
                 else{
                     if (!preg_match("/^([4]{1})([0-9]{12,15})$/", $vcardnum))
@@ -256,7 +270,7 @@ $userid =$_SESSION['UID'];
                     else{
                         $vcardnum = maskedCardNum($vcardnum);
                         $vcardnum = encrypt($vcardnum, $encryptionkey);
-                        
+
                     }
                     if (!preg_match("/^(0[1-9]|1[012]).([2-9][0-9])+$/", $vexpirydate))
                     {
@@ -266,12 +280,12 @@ $userid =$_SESSION['UID'];
                     else{
                         $updatevisa = true;
                     }
-//                    if (!preg_match("/^(?!000)[0-9]{3}$/", $vCVV)) 
+//                    if (!preg_match("/^(?!000)[0-9]{3}$/", $vCVV))
 //                    {
 //                        $errorMsg .= "Invalid card CV<br>";
 //                        $success = false;
 //                    }
-                    
+
                     if ($updatevisa){
                         $updatevisa = "UPDATE payment SET card_name = '$vcardname', card_number = '$vcardnum' , card_expiry='$vexpirydate' WHERE UID=$userid AND card_type='Visa'";
                         if (mysqli_query($db, $updatevisa)) {
@@ -305,7 +319,7 @@ $userid =$_SESSION['UID'];
                 {
                     echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Please fill in all fields! </div>";
                     $success = false;
-                    
+
                 }
                 else
                 {
@@ -317,7 +331,7 @@ $userid =$_SESSION['UID'];
                     else{
                         $vcardnum = maskedCardNum($vcardnum);
                         $vcardnum = encrypt($vcardnum, $encryptionkey);
-                        
+
                     }
                     if (!preg_match("/^(0[1-9]|1[012]).([2-9][0-9])+$/", $vexpirydate))
                     {
@@ -327,12 +341,12 @@ $userid =$_SESSION['UID'];
                     else{
                         $insertvisa = true;
                     }
-//                    if (!preg_match("/^(?!000)[0-9]{3}$/", $vCVV)) 
+//                    if (!preg_match("/^(?!000)[0-9]{3}$/", $vCVV))
 //                    {
 //                        $errorMsg .= "Invalid card CVV <br>";
 //                        $success = false;
 //                    }
-                    
+
                     if ($insertvisa){
                         $insertvisa = "INSERT INTO payment (UID, card_name, card_number, card_expiry, card_type) VALUES ('$userid', '$vcardname', '$vcardnum', '$vexpirydate', '$type')";
                         if (mysqli_query($db, $insertvisa)) {
@@ -349,7 +363,7 @@ $userid =$_SESSION['UID'];
                                 mysqli_free_result($visaresult);
                                 mysqli_close($db);
                             }
-                        } 
+                        }
 
                         else {
                             echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Error, unsuccessful! </div>";
@@ -359,8 +373,8 @@ $userid =$_SESSION['UID'];
             }
         }
     }
-            
-                
+
+
     //check if address in database is empty
     if (empty($address)){
         echo "<div class='col-lg-6'>";
@@ -374,7 +388,7 @@ $userid =$_SESSION['UID'];
     }
 
     else{
-        
+
         echo "<div class='col-lg-6'>";
         echo "<div class='form-group'>";
         echo "<h2>Billing Address</h2>";
@@ -397,6 +411,36 @@ $userid =$_SESSION['UID'];
         echo "<option value='Visa'>Visa</option>";
         echo "<option value='Mastercard'>MasterCard</option>";
         echo "</select><br>";
+        echo "<br><script>
+        $('#cards').on('change', function () {
+        var value = $(this).val();
+        var data = '';
+        if (value == 'Mastercard')
+        {
+
+          data+='<label >Name on credit card: </label>';
+        data+='<p>$MCcardname</p>';
+        data+='<label >Card Number (ending with): </label>';
+        data+='<p>$MCcardnum </p>'
+       data+='<label >Expiry Date</label>';
+     data+='<p> $MCexpirydate </p>';
+
+
+        }
+        else
+        {
+          
+            data+='<label >Name on credit card: </label>';
+          data+='<p>$visacardname</p>';
+          data+='<label >Card Number (ending with): </label>';
+          data+='<p>$visacardnum </p>'
+         data+='<label >Expiry Date</label>';
+       data+='<p> $visaexpirydate </p>';
+        }
+        $('#display').html(data);
+        });
+        </script>";
+          echo "<div id ='display'></div>";
         echo "<label class='form-check-label' for='cvvs'>CVV / CVC*</label><br>";
         echo "<input type='password' name='cvv' id='cvvs' class='form-control' placeholder='CVV' pattern = '(?!000)[0-9]{3}' required><br>";
         echo "<button type='submit' class='btn btn-primary' name='pay'>Make Payment</button><br><br>";
@@ -420,7 +464,7 @@ $userid =$_SESSION['UID'];
             echo "<label class='form-check-label'>Name on credit card: </label>";
             echo "<p>" . $visacardname . "</p>";
             echo "<label class='form-check-label'>Card Number (ending with): </label>";
-            echo "<p>" . $visacardnum . "</p>";;
+            echo "<p>" . $visacardnum . "</p>";
             echo "<label class='form-check-label'>Expiry Date</label>";
             echo "<p>" . $visaexpirydate . "</p>";
             echo "<label class='form-check-label' for='vcvv'>CVV / CVC*</label><br>";
@@ -469,7 +513,7 @@ $userid =$_SESSION['UID'];
                 echo "<label class='form-check-label' for='nocn'>Name on credit card*</label><br>";
                 echo "<input type='text' name='cardname' id='nocn' class='form-control' placeholder='Full Name on Card' required><br>";
                 echo "<label class='form-check-label' for='nonum'>Card Number*</label><br>";
-                echo "<input type='text' name='cardnum' id='nonum' class='form-control' placeholder='Card Number' required><br>";
+                echo "<input type='text' name='cardnum' id='nonum' class='form-control' placeholder='Card Number' pattern='4[0-9]{15}' required><br>";
                 echo "<label class='form-check-label' for='noexpire'>Expiry Date*</label><br>";
                 echo "<input type='text' name='expiredate' id='noexpire' class='form-control' placeholder='MM/YY' pattern = '(0[1-9]|1[012])[/]([2-9][0-9])' required><br>";
                 echo "<label class='form-check-label' for='cvv'>CVV / CVC*</label><br>";
@@ -480,7 +524,7 @@ $userid =$_SESSION['UID'];
             }
         }
     }
-    
+
     if (!$success){
         echo "<div class='container-fluid'>";
         echo "<div class=row>";
@@ -491,7 +535,7 @@ $userid =$_SESSION['UID'];
         echo "<a href='payment.php'><button class='btn btn-default'>Back to Payment</button></a><br>";
         echo "</div></div></div>";
     }
-    
+
         function sanitize_input($data)
     {
         $data = trim($data);
@@ -520,7 +564,7 @@ $userid =$_SESSION['UID'];
                                     <label for='card'>Accepted Cards: </label>
                                     <span class='fa fa-cc-visa' style='color:navy;'></span>
                                     <span class='fa fa-cc-mastercard' style='color:black;'></span>
-                                    
+
                                     <select class="form-control" name="cardtype" id="card" onchange="changecard();">
                                         <option value='Visa'>Visa</option>
                                         <option value='Mastercard'>Mastercard</option>
@@ -528,14 +572,14 @@ $userid =$_SESSION['UID'];
 
                                     <label class='form-check-label' for='cn'>Name on credit card</label><br>
                                     <input type='text' name='cardname' id='cn' class='form-control' placeholder='Full Name on Card' required><br>
-                                    
+
                                     <label class='form-check-label' for='num'>Card Number</label><br>
-                                    <input type='text' name='cardnum' id='num' class='form-control' placeholder='Card Number' required><br>
+                                    <input type='text' name='cardnum' id='num' class='form-control' placeholder='Card Number' pattern="4[0-9]{15}" required><br>
                                     <!--<input type='text' name='cardnum'id='num' class='form-control' placeholder='Card Number' pattern = '5[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11}' required style="display:none"><br>-->
 
                                     <label class='form-check-label' for='expire'>Expiry Date</label><br>
                                     <input type='text' name='expiredate' id='expire' class='form-control' placeholder='MM/YY' pattern = '(0[1-9]|1[012])[/]([2-9][0-9])' required><br>
-                                  
+
                                     <button type='submit' name='change' class='btn btn-primary'>Change</button><br><br>
                                 </div>
                             </div>

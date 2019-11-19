@@ -1,10 +1,3 @@
-
-<?php
-//session_start();
-//
-//
-// ?>
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -33,12 +26,19 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   </head>
   <body>
-<!---- header --->
-
-<?php include "header.php" ?>
-<?php include "config.php" ?>
-<?php include "encrypt.php"?>
+<!-- header -->
 <?php
+include "header.php";
+include "config.php";
+include "encrypt.php";
+?>
+<!-- content here -->
+<section>
+    <article>
+        <div class='container-fluid'>
+            <form action='process_payment.php' method='POST' onsubmit='return validateAddrForm()'>
+<?php
+
 if (!isset($_SESSION['email'])) {
 header ('location:index.php');
 }
@@ -54,20 +54,11 @@ $idsql= "SELECT * FROM cart WHERE checks = 1 AND UID=$userid"; // query cart ite
   $checkitem = mysqli_fetch_assoc($sqlitem);
   if (empty($checkitem)) {
     echo '<script language="javascript">';
-    echo 'alert("Please check out an item!")';
-    echo '</script>';
+    echo 'alert("Please check out an item!")</script>';
     header ('location:cart.php');
-   //echo '<input type="hidden" name="errorcart" value="">
-   //<small id="errorcart" class="form-text text-danger" hidden></small>  </form>';
   }
 }
-?>
 
-<!--- content here --->
-<section>
-    <article>
-
-<?php
 $success = true;
 $insertvisa = false;
 $insertmaster = false;
@@ -97,7 +88,6 @@ $userid =$_SESSION['UID'];
         $visacardnum = $visarow['card_number'];
         $visacardnum = decrypt($visacardnum, $encryptionkey);
         $visaexpirydate = $visarow['card_expiry'];
-        $visaCVV = $visarow['cvv'];
         mysqli_free_result($visaresult);
 
     }
@@ -109,7 +99,6 @@ $userid =$_SESSION['UID'];
         $MCcardnum = $masterrow['card_number'];
         $MCcardnum = decrypt($MCcardnum, $encryptionkey);
         $MCexpirydate = $masterrow['card_expiry'];
-        $MCCVV = $masterrow['cvv'];
         mysqli_free_result($masterresult);
 
     }
@@ -374,21 +363,18 @@ $userid =$_SESSION['UID'];
                 
     //check if address in database is empty
     if (empty($address)){
-        echo "<div class='container-fluid'>";
-        echo "<form action='process_payment.php' method='POST' onsubmit='return validateAddrForm()'>";
         echo "<div class='col-lg-6'>";
         echo "<div class='form-group'>";
         echo "<h2>Billing Address</h2>";
-        echo "<label class='form-check-label' for='address'>Street Address</label><br>";
-        echo "<input type='text' name='address' id='address' class='form-control' placeholder='Street address, P.O box, unit, floor' pattern='[A-Za-z0-9\-\(\)#@(\) ]+' required><br>";
-        echo "<label class='form-check-label' for='code'>Postal Code</label><br>";
-        echo "<input type='text' name='code' id='code' class='form-control' placeholder='Postal Code' pattern='[0-9]{5,6}' required><br>";
+        echo "<label class='form-check-label' for='noaddress'>Street Address</label><br>";
+        echo "<input type='text' name='address' id='noaddress' class='form-control' placeholder='Street address, P.O box, unit, floor' pattern='[A-Za-z0-9\-\(\)#@(\) ]+' required><br>";
+        echo "<label class='form-check-label' for='nocode'>Postal Code</label><br>";
+        echo "<input type='text' name='code' id='nocode' class='form-control' placeholder='Postal Code' pattern='[0-9]{5,6}' required><br>";
         echo "</div></div>";
     }
 
     else{
-        echo "<div class='container-fluid'>";
-        echo "<form action='process_payment.php' method='POST' onsubmit='return validateAddrForm()'>";
+        
         echo "<div class='col-lg-6'>";
         echo "<div class='form-group'>";
         echo "<h2>Billing Address</h2>";
@@ -407,15 +393,15 @@ $userid =$_SESSION['UID'];
         echo "<label for='cards'>Selected Card: </label>";
         echo " <span class='fa fa-cc-visa' style='color:navy;'></span> ";
         echo "<span class='fa fa-cc-mastercard' style='color:black;'></span> ";
-        echo "<select class='form-control' name='cardtype' id='cards'>";
+        echo "<select class='form-control' name='cardtype' id='cards' onchange='changecard()'>";
         echo "<option value='Visa'>Visa</option>";
         echo "<option value='Mastercard'>MasterCard</option>";
         echo "</select><br>";
-        echo "<label class='form-check-label' for='cvv'>CVV / CVC*</label><br>";
-        echo "<input type='password' name='cvv' id='cvv' class='form-control' placeholder='CVV' pattern = '(?!000)[0-9]{3}' required><br>";
+        echo "<label class='form-check-label' for='cvvs'>CVV / CVC*</label><br>";
+        echo "<input type='password' name='cvv' id='cvvs' class='form-control' placeholder='CVV' pattern = '(?!000)[0-9]{3}' required><br>";
         echo "<button type='submit' class='btn btn-primary' name='pay'>Make Payment</button><br><br>";
         echo "<a href='cart.php'><button type='button' class='btn btn-danger'>Back</button></a>";
-        echo "</div></div></form></div>";
+        echo "</div></div>";
     }
     else
     {
@@ -425,23 +411,23 @@ $userid =$_SESSION['UID'];
             echo "<div class='col-lg-6'>";
             echo "<div class='form-group'>";
             echo "<h2>Payment</h2>";
-            echo "<label for='cards'>Selected Card: </label> <a href='#changecardmodal' data-toggle='modal' data-target='#changecardmodal'><span class='glyphicon glyphicon-pencil'>Edit </span></a>";
+            echo "<label for='vcards'>Selected Card: </label> <a href='#changecardmodal' data-toggle='modal' data-target='#changecardmodal'><span class='glyphicon glyphicon-pencil'>Edit </span></a>";
             echo " <span class='fa fa-cc-visa' style='color:navy;'></span> ";
             echo "<span class='fa fa-cc-mastercard' style='color:black;'></span> ";
-            echo "<select class='form-control' name='cardtype' id='cards'>";
+            echo "<select class='form-control' name='cardtype' id='vcards'>";
             echo "<option value='Visa'>Visa</option>";
             echo "</select><br>";
-            echo "<label class='form-check-label' for='cn'>Name on credit card: </label>";
+            echo "<label class='form-check-label'>Name on credit card: </label>";
             echo "<p>" . $visacardname . "</p>";
-            echo "<label class='form-check-label' for='num'>Card Number (ending with): </label>";
+            echo "<label class='form-check-label'>Card Number (ending with): </label>";
             echo "<p>" . $visacardnum . "</p>";;
-            echo "<label class='form-check-label' for='expire'>Expiry Date</label>";
+            echo "<label class='form-check-label'>Expiry Date</label>";
             echo "<p>" . $visaexpirydate . "</p>";
-            echo "<label class='form-check-label' for='cvv'>CVV / CVC*</label><br>";
-            echo "<input type='password' name='cvv' id='cvv' class='form-control' placeholder='CVV' pattern = '(?!000)[0-9]{3}' required><br>";
+            echo "<label class='form-check-label' for='vcvv'>CVV / CVC*</label><br>";
+            echo "<input type='password' name='cvv' id='vcvv' class='form-control' placeholder='CVV' pattern = '(?!000)[0-9]{3}' required><br>";
             echo "<button type='submit' class='btn btn-primary' name='pay'>Make Payment</button><br><br>";
             echo "<a href='cart.php'><button type='button' class='btn btn-danger'>Back</button></a>";
-            echo "</div></div></form></div>";
+            echo "</div></div>";
         }
         else{
             //if user only has mastercard
@@ -449,23 +435,23 @@ $userid =$_SESSION['UID'];
                 echo "<div class='col-lg-6'>";
                 echo "<div class='form-group'>";
                 echo "<h2>Payment</h2>";
-                echo "<label for='cards'>Selected Card: </label> <a href='#changecardmodal' data-toggle='modal' data-target='#changecardmodal'><span class='glyphicon glyphicon-pencil'>Edit </span></a>";
+                echo "<label for='mcards'>Selected Card: </label> <a href='#changecardmodal' data-toggle='modal' data-target='#changecardmodal'><span class='glyphicon glyphicon-pencil'>Edit </span></a>";
                 echo " <span class='fa fa-cc-visa' style='color:navy;'></span> ";
                 echo "<span class='fa fa-cc-mastercard' style='color:black;'></span> ";
-                echo "<select class='form-control' name='cardtype' id='cards'>";
+                echo "<select class='form-control' name='cardtype' id='mcards'>";
                 echo "<option value='Mastercard'>Mastercard</option>";
                 echo "</select><br>";
-                echo "<label class='form-check-label' for='cn'>Name on credit card: </label>";
+                echo "<label class='form-check-label'>Name on credit card: </label>";
                 echo "<p>" . $MCcardname . "</p>";
-                echo "<label class='form-check-label' for='num'>Card Number: </label>";
+                echo "<label class='form-check-label'>Card Number: </label>";
                 echo "<p>" . $MCcardnum . "</p>";;
-                echo "<label class='form-check-label' for='expire'>Expiry Date</label>";
+                echo "<label class='form-check-label'>Expiry Date</label>";
                 echo "<p>" . $MCexpirydate . "</p>";
-                echo "<label class='form-check-label' for='cvv'>CVV / CVC*</label><br>";
-                echo "<input type='password' name='cvv' id='cvv' class='form-control' placeholder='CVV' pattern = '(?!000)[0-9]{3}' required><br>";
+                echo "<label class='form-check-label' for='mcvv'>CVV / CVC*</label><br>";
+                echo "<input type='password' name='cvv' id='mcvv' class='form-control' placeholder='CVV' pattern = '(?!000)[0-9]{3}' required><br>";
                 echo "<button type='submit' class='btn btn-primary' name='pay'>Make Payment</button><br><br>";
                 echo "<a href='cart.php'><button type='button' class='btn btn-danger'>Back</button></a>";
-                echo "</div></div></form></div>";
+                echo "</div></div>";
             }
             else
             {
@@ -473,24 +459,24 @@ $userid =$_SESSION['UID'];
                 echo "<div class='col-lg-6'>";
                 echo "<div class='form-group'>";
                 echo "<h2>Payment</h2>";
-                echo "<label for='cards'>Accepted Cards:* </label>";
+                echo "<label for='nocards'>Accepted Cards:* </label>";
                 echo " <span class='fa fa-cc-visa' style='color:navy;'></span> ";
                 echo "<span class='fa fa-cc-mastercard' style='color:black;'></span>";
-                echo "<select class='form-control' name='cardtype' id='cards'>";
+                echo "<select class='form-control' name='cardtype' id='nocards'>";
                 echo "<option value='Visa'>Visa</option>";
                 echo "<option value='Mastercard'>MasterCard</option>";
                 echo "</select><br>";
-                echo "<label class='form-check-label' for='cn'>Name on credit card*</label><br>";
-                echo "<input type='text' name='cardname' id='cn' class='form-control' placeholder='Full Name on Card' required><br>";
-                echo "<label class='form-check-label' for='num'>Card Number*</label><br>";
-                echo "<input type='text' name='cardnum'id='num' class='form-control' placeholder='Card Number' required><br>";
-                echo "<label class='form-check-label' for='expire'>Expiry Date*</label><br>";
-                echo "<input type='text' name='expiredate' id='expire' class='form-control' placeholder='MM/YY' pattern = '(0[1-9]|1[012])[/]([2-9][0-9])' required><br>";
+                echo "<label class='form-check-label' for='nocn'>Name on credit card*</label><br>";
+                echo "<input type='text' name='cardname' id='nocn' class='form-control' placeholder='Full Name on Card' required><br>";
+                echo "<label class='form-check-label' for='nonum'>Card Number*</label><br>";
+                echo "<input type='text' name='cardnum' id='nonum' class='form-control' placeholder='Card Number' required><br>";
+                echo "<label class='form-check-label' for='noexpire'>Expiry Date*</label><br>";
+                echo "<input type='text' name='expiredate' id='noexpire' class='form-control' placeholder='MM/YY' pattern = '(0[1-9]|1[012])[/]([2-9][0-9])' required><br>";
                 echo "<label class='form-check-label' for='cvv'>CVV / CVC*</label><br>";
                 echo "<input type='password' name='cvv' id='cvv' class='form-control' placeholder='CVV' pattern = '(?!000)[0-9]{3}' required><br>";
                 echo "<button type='submit' class='btn btn-primary' name='pay'>Make Payment</button><br><br>";
                 echo "<a href='cart.php'><button type='button' class='btn btn-danger'>Back</button></a>";
-                echo "</div></div></form>";
+                echo "</div></div>";
             }
         }
     }
@@ -505,11 +491,8 @@ $userid =$_SESSION['UID'];
         echo "<a href='payment.php'><button class='btn btn-default'>Back to Payment</button></a><br>";
         echo "</div></div></div>";
     }
-?>
-
-<?php
-
-    function sanitize_input($data)
+    
+        function sanitize_input($data)
     {
         $data = trim($data);
         $data = stripslashes($data);
@@ -518,6 +501,9 @@ $userid =$_SESSION['UID'];
     }
 
 ?>
+    </form>
+        </div>
+
         <div class="modal fade" id="changecardmodal">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -531,11 +517,11 @@ $userid =$_SESSION['UID'];
                         <form action='#' method='POST'>
                             <div class='col-lg-6'>
                                 <div class='form-group'>
-                                    <label for='cards'>Accepted Cards: </label>
+                                    <label for='card'>Accepted Cards: </label>
                                     <span class='fa fa-cc-visa' style='color:navy;'></span>
                                     <span class='fa fa-cc-mastercard' style='color:black;'></span>
                                     
-                                    <select class="form-control" name="cardtype" id="cards" onchange="changecard();">
+                                    <select class="form-control" name="cardtype" id="card" onchange="changecard();">
                                         <option value='Visa'>Visa</option>
                                         <option value='Mastercard'>Mastercard</option>
                                     </select><br>
@@ -544,7 +530,7 @@ $userid =$_SESSION['UID'];
                                     <input type='text' name='cardname' id='cn' class='form-control' placeholder='Full Name on Card' required><br>
                                     
                                     <label class='form-check-label' for='num'>Card Number</label><br>
-                                    <input type='text' name='cardnum'id='num' class='form-control' placeholder='Card Number' required><br>
+                                    <input type='text' name='cardnum' id='num' class='form-control' placeholder='Card Number' required><br>
                                     <!--<input type='text' name='cardnum'id='num' class='form-control' placeholder='Card Number' pattern = '5[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11}' required style="display:none"><br>-->
 
                                     <label class='form-check-label' for='expire'>Expiry Date</label><br>
@@ -562,9 +548,9 @@ $userid =$_SESSION['UID'];
     </article>
 </section>
 </body>
-<!--- footer--->
+<!--footer-->
 <?php include "footer.php" ?>
-<!--- end footer--->
+<!--end footer-->
 
 
 </html>

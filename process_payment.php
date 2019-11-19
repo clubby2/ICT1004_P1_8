@@ -23,21 +23,23 @@
 <script scr="js/bootstrap.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   </head>
+  
   <body>
-
+    <main>
+        <section>
+            <article>
+<!-- header -->
+<?php include "header.php" ?>
+<?php include "config.php" ?>
+<?php include "encrypt.php"?>
+<!-- content here -->
 <?php
     //cannot directly access process payment page without clicking pay button in payment page
     if (!isset($_POST['pay'])) {
     header ('location:index.php');
     exit();
     }
-?>
-<!---- header --->
-<?php include "header.php" ?>
-<?php include "config.php" ?>
-<?php include "encrypt.php"?>
-<!--- content here --->
-<?php
+
 $address = $postal = $card = $cardname = $cardnum = $expirydate = $CVV = "";
 $total = 0;
 $subtotal = 0;
@@ -143,7 +145,7 @@ $userid =$_SESSION['UID'];
                         echo "<div class=row>";
                         echo "<div class=col-lg-12>";
                         echo "<h2>Thank you for your purchase!</h2>";
-                        echo "<table border=0 width=50%>";
+                        echo "<table width=50%>";
                         echo "<thead><tr><th colspan='5'>Items</th>";
                         echo "<th colspan='2' align='center'>Quantity</th>";
                         echo "<th colspan='2' align='center'>Item Price</th></tr></thead><tbody>";
@@ -170,13 +172,18 @@ $userid =$_SESSION['UID'];
                         $deletecart = "DELETE FROM cart WHERE UID = $userid AND checks='1'";
                         mysqli_query($db, $deletecart);
                         mysqli_close($db);
-                    
+                        echo "<a href='transaction.php'><button class='btn btn-default'>View Transaction History</button></a> ";
+                        echo "<a href='index.php'><button class='btn btn-default'>Home</button></a><br>";
+                        echo "</div></div></div>";
                     }
-                
-                
-                    echo "<a href='transaction.php'><button class='btn btn-default'>View Transaction History</button></a> ";
-                    echo "<a href='index.php'><button class='btn btn-default'>Home</button></a><br>";
-                    echo "</div></div></div>";
+                    else{
+                        echo "<div class=container-fluid>";
+                        echo "<div class=row>";
+                        echo "<div class=col-lg-12>";
+                        echo "<h2>Items Paid!</h2>";
+                        echo "<a href='transaction.php'><button class='btn btn-default'>View Transaction History</button></a> ";
+                        echo "<a href='index.php'><button class='btn btn-default'>Home</button></a><br>";
+                    }
                 }
                 else{
                     echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Transaction unsuccessful! </div>";
@@ -224,7 +231,7 @@ $userid =$_SESSION['UID'];
                     echo "<div class=row>";
                     echo "<div class=col-lg-12>";
                     echo "<h2>Thank you for your purchase!</h2>";
-                    echo "<table border=0 width=50%>";
+                    echo "<table width=50%>";
                     echo "<thead><tr><th colspan='5'>Items</th>";
                     echo "<th colspan='2' align='center'>Quantity</th>";
                     echo "<th colspan='2' align='center'>Item Price</th></tr></thead><tbody>";
@@ -256,6 +263,14 @@ $userid =$_SESSION['UID'];
                     echo "<a href='transaction.php'><button class='btn btn-default'>View Transaction History</button></a> ";
                     echo "<a href='index.php'><button class='btn btn-default'>Home</button></a><br>";
                     echo "</div></div></div>";
+                }
+                else{
+                    echo "<div class=container-fluid>";
+                    echo "<div class=row>";
+                    echo "<div class=col-lg-12>";
+                    echo "<h2>Items Paid!</h2>";
+                    echo "<a href='transaction.php'><button class='btn btn-default'>View Transaction History</button></a> ";
+                    echo "<a href='index.php'><button class='btn btn-default'>Home</button></a><br>";
                 }
             
                 
@@ -291,10 +306,12 @@ function sanitize_input($data)
 
 
 ?>
-
+            </article>
+        </section>
+    </main>
 </body>
-<!--- footer--->
+<!-- footer -->
 <?php include "footer.php" ?>
-<!--- end footer--->
+<!-- end footer -->
 
 </html>

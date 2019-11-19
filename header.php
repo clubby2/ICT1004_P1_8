@@ -1,7 +1,6 @@
 <?php
 session_start();
 if(isset($_SESSION['email'])){
-
 }
 if(isset($_POST['logout'])){
   //session_start();
@@ -12,9 +11,6 @@ unset($_SESSION['role']);
 unset($_SESSION['UID']);
 //header('Location:index.php');
 }
-
-
-
  ?>
 
 
@@ -181,29 +177,44 @@ unset($_SESSION['UID']);
             </div>
             <div class="modal-body">
           <!--- my body content--->
-          <form class="" action="" method="post" >
+          <form action = "user_register.php" class method="post" >
+
+            <div class="form-group has-feedback">
+              <input type="text" class="form-control" placeholder="First Name (Optional)" name="first_name" id="first_name">
+
+              <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+
+            <div class="form-group has-feedback">
+              <input type="text" class="form-control" placeholder="Last Name" name="last_name" id="last_name">
+
+              <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+
             <div class="form-group has-feedback">
               <input type="email" class="form-control"name="setusername" placeholder="Username/Email"id="setusername">
               <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
+
             <div class="form-group has-feedback">
               <input type="password" class="form-control" placeholder="Password"name="setpw" id="setpw">
 
               <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
+
             <div class="form-group has-feedback">
-              <input type="password" class="form-control" placeholder="Re-enter Password" name="setpw1" id="setpw1">
+              <input type="password" class="form-control" placeholder="Confirm Password" name="setpw1" id="setpw1">
 
               <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
-
-
-          </form>
-            </div>
+            <tr><td><input type = "radio" name = "terms" value = "agree">&nbsp;  I Agree to the Terms and Conditions.</td></tr>
             <div class="modal-footer text-center">
-              <button type="submit" onclick="signup()" class="btn btn-primary ">Sign Up </button>
+              <button type="submit" name="submit" onclick="signup()" class="btn btn-primary ">Sign Up </button>
               <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
             </div>
+          </form>
+            </div>
+
           </div>
           <!-- /.modal-content -->
         </div>

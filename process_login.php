@@ -11,6 +11,8 @@ $email=$_POST['email'];
 $password=$_POST['password'];
 $email = mysqli_real_escape_string($db, $_POST['email']);
 $password = mysqli_real_escape_string($db, $_POST['password']);
+//$password= password_hash($password, PASSWORD_BCRYPT);
+
   if (empty($email)) {
       $erroremail ="Username is required";
   }
@@ -21,10 +23,12 @@ $password = mysqli_real_escape_string($db, $_POST['password']);
   	$errorpassword = "Password is required";
   }
 
-$sql = "SELECT * FROM user WHERE email='$email' AND password='$password' LIMIT 1";
+$sql = "SELECT * FROM user WHERE email='$email' LIMIT 1";
 $sqlquery= mysqli_query($db,$sql);
 $usersql = mysqli_fetch_assoc($sqlquery);
-if (empty($usersql)){
+
+
+if (empty($usersql) || !password_verify($password, $usersql['password'])) { // if password is not verify show error
   $errorbth="Wrong email/password combination";
 }
 else{

@@ -47,40 +47,40 @@ header('Location:index.php');
    <!--- content here --->
    <div class="container-fluid">
      <ol class="breadcrumb" >
-          <li><a href="#adminProducts" onclick="adminproduct()"><i class="fa fa-dashboard"></i>Product</a></li>
-         <li><a href="#others" onclick="admincustomers()"><i class="fa fa-dashboard"></i> Customers</a></li>
+          <li><a href="#adminProducts" onclick="adminproduct()"><i class="fa fa-shopping-bag"></i>Product</a></li>
+         <li><a href="#adminCustomers" onclick="admincustomers()"><i class="fa fa-vcard"></i> Customers</a></li>
         </ol>
-     <div class="row" id="adminProducts">
+     <div class="row container-narrow" id="adminProducts">
 
-         <div class="row" >
-         	<div class="col-lg-10">
+         <div class="row">
+         	<div class="col-lg-10" style="padding-left: 30px;" >
 
          		<h2>Product List</h2>
-         	</div>
-         	<div class="col-lg-4">
-         		<a href="#" data-toggle="modal" data-target="#add_product_modal" class="btn btn-primary btn-sm">Add Product</a>
+         		<a href="#" data-toggle="modal" data-target="#add_product_modal" class="btn btn-primary btn-lg fa fa-cloud-upload">Add Product</a>
          	</div>
          </div>
          <div class="table-responsive">
-           <table class="table table-striped table-sm">
+           <table class="table table-striped table-sm ">
              <thead>
                <tr>
 
-                 <th>Name</th>
-                 <th>Price</th>
-                 <th>Quantity</th>
-                 <th>Category</th>
-                 <th>Action</th>
+                   <th><u>Name</u></th>
+                 <th><u>Price</u></th>
+                 <th><u>Quantity</u></th>
+                 <th><u>Category</u></th>
+                 <th><u>Action</u></th>
                </tr>
              </thead>
               <tbody id="product_list">
          <?php
           require 'config.php';
             $sql = "SELECT * FROM item ";
+
             if ($result = mysqli_query($db, $sql)) {
               if(mysqli_num_rows($result) > 0){
                while ($row = mysqli_fetch_array($result)) {
-                  echo '<div class="col-lg-4 text-center">';
+
+                  echo '<div class="col-lg-6 text-center">';
                           //  echo $row["item_name"];
                   $item_id=$row["item_id"];
                   $item_name=$row["item_name"];
@@ -91,15 +91,18 @@ header('Location:index.php');
                   //$item_description=$row["item_description"];
                   //$item_features=$row["item_features"];
                   //echo $item_image;
-                    echo'<tr>
+                    echo'<tr> 
+
                     <td>'.$item_name.'</td>
                     <td>$'.$item_price.'</td>
                     <td>'.$item_quantity.'</td>
                     <td>'.$item_category.'</td>
                     <td>';
+
                     echo'<a class="btn btn-sm btn-danger"name="delproducts" data-toggle="modal" data-target="#delModalproduct'.$item_id.'">Delete</a>
                     </td>
                 </tr>';
+
                 echo'<div class="modal fade" id="delModalproduct'.$item_id.'">';
                    echo  '<form action="modal.php" method="post">';
                      echo '<input type="hidden" name="getitemid" value="'.$item_id.' " readonly>';
@@ -111,6 +114,7 @@ header('Location:index.php');
                                  <h1 class="modal-title">Removing Item </h1>
                              </div>
                          <div class="modal-body ">
+
                          <h3>Do you want to remove '.$item_name.'? </h3>
                            <div class="modal-footer">
                                <button type="submit"name="delproducts" class="btn btn-danger text-center">Remove</button>
@@ -140,14 +144,11 @@ header('Location:index.php');
        </main>
      </div>
    </div>
-   </div>
-
    <!--- customer div--->
-      <div class="container-fluid">
-   <div class="row" id="adminCustomers" style="display:none;">
+   <div class="container-narrow" id="adminCustomers" style="display:none;">
 
        <div class="row">
-        <div class="col-lg-10" >
+        <div class="col-lg-10 "style="padding-left: 30px;">
 
           <h2>Customers</h2>
         </div>
@@ -158,12 +159,12 @@ header('Location:index.php');
            <thead>
              <tr>
 
-               <th>Name</th>
-               <th>Email</th>
-               <th>item</th>
-               <th>Price</th>
-               <th>total_price</th>
-               <th>date_purchase</th>
+               <th><u>Name</u></th>
+               <th><u>Email</u></th>
+               <th><u>Item</u></th>
+               <th><u>Price</u></th>
+               <th><u>Total Price</u></th>
+               <th><u>Date Purchase</u></th>
              </tr>
            </thead>
            <?php
@@ -173,6 +174,7 @@ FROM history_payment a left join user b on a.UID =b.UID";
           if ($result = mysqli_query($db, $sqlcustomer)) {
             if(mysqli_num_rows($result) > 0){
               while ($row = mysqli_fetch_array($result)) {
+
                 echo '<div class="col-lg-4 text-center">';
                       //echo $row["item_name"];
                       $name=$row["first_name"];
@@ -181,14 +183,18 @@ FROM history_payment a left join user b on a.UID =b.UID";
                       $item_price=$row["item_price"];
                       $item_total=$row["total_price"];
                       $item_date=$row["date_purchased"];
+
                         echo'<tr>
                         <td>'.$name.'</td>
                         <td>'.$item_email.'</td>
                         <td>'.$item_name.'</td>
-                        <td>'.$item_price.'</td>
-                        <td>'.$item_total.'</td>
+                        <td>$'.$item_price.'</td>
+                        <td>$'.$item_total.'</td>
                         <td>'.$item_date.'</td>
+
                         </tr>';
+
+
                            }
                            $result->free_result();
                            }
@@ -206,15 +212,14 @@ FROM history_payment a left join user b on a.UID =b.UID";
          </div>
 
 
-
 </div>
-   </div>
+
    <!-- Add Product Modal start -->
    <div class="modal fade" id="add_product_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
      <div class="modal-dialog" role="document">
        <div class="modal-content">
          <div class="modal-header">
-           <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
+           <h2 class="modal-title" id="exampleModalLabel">Add Product</h2>
            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
              <span aria-hidden="true">&times;</span>
            </button>
@@ -225,7 +230,7 @@ FROM history_payment a left join user b on a.UID =b.UID";
            		<div class="col-lg-12">
            			<div class="form-group">
    		        		<label>Product Name</label>
-   		        		<input required type="text" name="item_name" class="form-control" placeholder="Enter Product Name">
+   		        		<input type="text" name="item_name" class="form-control" placeholder="Enter Product Name">
    		        	</div>
            		</div>
            		<div class="col-lg-12">
@@ -240,7 +245,7 @@ FROM history_payment a left join user b on a.UID =b.UID";
            		<div class="col-lg-12">
            			<div class="form-group">
    		        		<label>Product Description</label>
-   		        		<textarea required class="form-control" name="item_description" placeholder="Enter product desc"></textarea>
+   		        		<textarea class="form-control" name="item_description" placeholder="Enter product desc"></textarea>
    		        	</div>
            		</div>
                <div class="col-lg-12">
@@ -279,22 +284,9 @@ FROM history_payment a left join user b on a.UID =b.UID";
      </div>
    </div>
    <!-- Add Product Modal end -->
-
-
-
-
-
-
-
-
-
-
-
    <!--- footer--->
   <?php include "footer.php" ?>
    <!--- end footer--->
-
-
 
   </body>
 </html>

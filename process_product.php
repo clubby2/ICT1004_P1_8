@@ -33,15 +33,66 @@ if(isset($_FILES['item_image'])){
          print_r($errors);
       }
    }
-  //echo $img_dir."what is this";
+   $item_image =$img_dir;
+  
+if (empty($_POST['item_name']))
+{
+$errorMsg .= "Item_name is required.<br>";
+$success = false;
+}
+else if (!preg_match("/^[a-zA-Z ]*$/",$item_name))
+{
+ $errorMsg .='Only letters and white space allowed';
+ $success = false;
+} else{
+   $item_name = sanitize_input($_POST['item_name']); 
+   // Additional check to make sure input is well-formed.
+  }
+  
+   if (empty($_POST['item_category'])) {
+    $errorMsg = "Category is required";
+    $success = false;
+  } else {
+    $item_category = sanitize_input($_POST['item_category']);
+  }
+  
+ $item_quantity = 0;
 
-$item_name =$_POST['item_name'];
-$item_category =$_POST['item_category'];
-$item_quantity =$_POST['item_quantity'];
-$item_price =$_POST['item_price'];
-$item_description =$_POST['item_description'];
-$item_features =$_POST['item_features'];
-$item_image =$img_dir;
+if (filter_var($item_quantity, FILTER_VALIDATE_INT) === 0 || filter_var($item_quantity, FILTER_VALIDATE_INT)) {
+    $item_quantity = sanitize_input($_POST['item_quantity']);
+} else {
+    echo("Variable is not an integer");
+    $success = false;
+}
+   
+   
+ $item_price = 0;
+
+if (filter_var($item_price, FILTER_VALIDATE_INT) === 0 || filter_var($item_price, FILTER_VALIDATE_INT)) {
+    $item_price = sanitize_input($_POST['item_price']);
+} else {
+    echo("Variable is not an integer");
+    $success = false;
+}
+   
+
+if (empty($_POST['item_description']))
+{
+$errorMsg .= "Item_name is required.<br>";
+$success = false;
+}
+else if (!preg_match("/^[a-zA-Z ]*$/",$item_description))
+{
+ $errorMsg .='Only letters and white space allowed';
+ $success = false;
+} else{
+   $item_description = sanitize_input($_POST['item_description']); 
+   // Additional check to make sure input is well-formed.
+  }
+
+
+$item_features = sanitize_input($_POST['item_features']);
+
 
 //exit;
 $sql = "INSERT INTO item (item_name,item_category,item_quantity,item_price,item_description,item_features,item_image)";
@@ -63,6 +114,13 @@ $success = false;
 
 $db->close();
    
-  
+  function sanitize_input($data)
+{
+$data = trim($data);
+$data = stripslashes($data);
+$data = htmlspecialchars($data);
+return $data;
+}
+
    
    ?>

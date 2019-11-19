@@ -225,7 +225,7 @@ FROM history_payment a left join user b on a.UID =b.UID";
            		<div class="col-lg-12">
            			<div class="form-group">
    		        		<label>Product Name</label>
-   		        		<input type="text" name="item_name" class="form-control" placeholder="Enter Product Name">
+   		        		<input required type="text" name="item_name" class="form-control" placeholder="Enter Product Name">
    		        	</div>
            		</div>
            		<div class="col-lg-12">
@@ -240,7 +240,7 @@ FROM history_payment a left join user b on a.UID =b.UID";
            		<div class="col-lg-12">
            			<div class="form-group">
    		        		<label>Product Description</label>
-   		        		<textarea class="form-control" name="item_description" placeholder="Enter product desc"></textarea>
+   		        		<textarea required class="form-control" name="item_description" placeholder="Enter product desc"></textarea>
    		        	</div>
            		</div>
                <div class="col-lg-12">

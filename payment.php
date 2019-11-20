@@ -411,14 +411,21 @@ $userid =$_SESSION['UID'];
         echo "<option value='Visa'>Visa</option>";
         echo "<option value='Mastercard'>MasterCard</option>";
         echo "</select><br>";
+        echo "<div id='default' label class='form-check-label'>Name on credit card: </label>";
+        echo "<p>" . $visacardname . "</p>";
+        echo "<label class='form-check-label'>Card Number (ending with): </label>";
+        echo "<p>" . $visacardnum . "</p>";
+        echo "<label class='form-check-label'>Expiry Date</label>";
+        echo "<p>" . $visaexpirydate . "</p></div>";
         echo "<br><script>
         $('#cards').on('change', function () {
         var value = $(this).val();
         var data = '';
         if (value == 'Mastercard')
         {
-
-          data+='<label >Name on credit card: </label>';
+        var elem = document.querySelector('#default');
+      elem.style.display='none';
+        data+='<label >Name on credit card: </label>';
         data+='<p>$MCcardname</p>';
         data+='<label >Card Number (ending with): </label>';
         data+='<p>$MCcardnum </p>'
@@ -429,7 +436,7 @@ $userid =$_SESSION['UID'];
         }
         else
         {
-          
+
             data+='<label >Name on credit card: </label>';
           data+='<p>$visacardname</p>';
           data+='<label >Card Number (ending with): </label>';

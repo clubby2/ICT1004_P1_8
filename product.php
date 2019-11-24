@@ -160,7 +160,7 @@
                        </div>
                    <div class="modal-footer">
                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                       <button type="submit" class="btn btn-primary" >Add to Cart</button>
+                       <button type="submit"name="btntocart" class="btn btn-primary" >Add to Cart</button>
                    </div>
                        </div>
                     </div>
@@ -295,7 +295,7 @@ if ($result = mysqli_query($db, $sql)) {
                 </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                <button type="submit" name="btntocart" class="btn btn-primary">Add to Cart</button>
             </div>
                 </div>
              </div></form>

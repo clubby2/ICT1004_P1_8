@@ -18,8 +18,8 @@
 
 
      <div class="row ">
-       <div class="col-lg-4 text-center">
-         <h2>Contact Us</h2>
+       <div class="col-sm-4 text-center">
+         <h2><strong>Contact Us</strong></h2>
          <br>
          Email:<br>
          <a href="#" class="link-color">flexout@gmail.com</a>
@@ -29,8 +29,8 @@
          <p></p>
          <br>
        </div>
-       <div class="col-lg-4 text-center">
-         <h2>Find Us</h2>
+       <div class="col-sm-4 text-center">
+         <h2><strong>Find Us </strong></h2>
          <br>
          Address:<br>
          10 Dover Dr, <br> Singapore 138683
@@ -39,14 +39,15 @@
          +65 9876 5432</p>
        </div>
        <!-- GOOGLE MAP-->
-       <div class="col-lg-4 text-center">
-           <div class="">
-<div class="mapouter img-responsive"><div class="gmap_canvas"><iframe width="267" height="256" id="gmap_canvas" src="https://maps.google.com/maps?q=138683%20&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.utilitysavingexpert.com">Utility Saving Expert</a></div><style>.mapouter{position:relative;text-align:right;height:256px;width:267px;}.gmap_canvas {overflow:hidden;background:none!important;height:256px;width:267px;}</style></div>
+       <div class="col-sm-4 text-center">
+
+<div class="mapouter img-responsive"><div class="gmap_canvas"><iframe width="390" height="256" id="gmap_canvas" src="https://maps.google.com/maps?q=138683%20&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
        </div></div>
-     </div>
-       </div>
+     </div> </div>
+
        <div class="container">
-         <ul>
+        <hr>
+         <ul><h2><strong>Stay Connected</strong></h2>
            <a  href="https://facebook.com" class="btn btn-social-icon btn-facebook"><i class="fa fa-facebook"></i></a>
            <a  href="https://www.instagram.com" class="btn btn-social-icon btn-instagram"><i class="fa fa-instagram"></i></a>
            <a  href="https://twitter.com" class="btn btn-social-icon btn-twitter"><i class="fa fa-twitter"></i></a>

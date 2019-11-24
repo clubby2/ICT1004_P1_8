@@ -1,14 +1,15 @@
 <?php
 
 session_start();
-require 'config.php';
 
+include 'encrypt.php';
 //Constants for accessing our DB:
+/*
 define("DBHOST", "161.117.122.252");
 define("DBNAME", "p1_8");
 define("DBUSER", "p1_8");
 define("DBPASS", "1rE4exyIbQ");
-
+*/
 //Define variables and set to empty values
 $cardNameErrorMsg = $cardtypeErrorMsg = $cardNumErrorMsg = $expDateErrorMsg = $cvcErrorMsg = $errorMsg = "";
 $cardName = $cardtype = $cardNum = $expDate = $cvc = $selectCards = "";
@@ -46,7 +47,8 @@ if (empty($_POST["cardNum"])) {
     $cardtype = sanitize_input($_POST["cardtype"]);
 
     if ($cardtype == "Visa") {
-        if (!preg_match("/^([4]{1})([0-9]{12,15})$/", $cardNum)) {
+          if (!preg_match('/^4[0-9]{15}$/', $cardNum)) {
+            echo $cardNum;
             $cardNumErrorMsg = "Visa card invalid. Please ensure that you have entered the correct format.";
             $success = false;
         }
@@ -56,6 +58,8 @@ if (empty($_POST["cardNum"])) {
             $success = false;
         }
     }
+    $cardNum = maskedCardNum($cardNum);
+    $cardNum = encrypt($cardNum, $encryptionkey);
 }
 
 //Card expiry date validation
@@ -118,19 +122,19 @@ function sanitize_input($data) {
 
 //Helper function to write the data to the DB
 global $cardName, $cardtype, $cardNum, $expDate, $cvc, $errorMsg, $success;
-
+require 'config.php';
 //Create connection
-$conn = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
+//$db = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
 
 //Check connection
-if ($conn->connect_error) {
-    $errorMsg = "Connection failed: " . $conn->connect_error;
+if ($db->connect_error) {
+    $errorMsg = "Connection failed: " . $db->connect_error;
     $success = false;
 } else {
     $cardinfoQuery = "SELECT * FROM p1_8.payment WHERE UID ='$_SESSION[UID]]'";
 
     //Execute query and store the result set
-    $result = mysqli_query($conn, $cardinfoQuery);
+    $result = mysqli_query($db, $cardinfoQuery);
 
     if ($result) {
         //Return number of rows in the table
@@ -138,24 +142,24 @@ if ($conn->connect_error) {
 
         if ($row > 0) {
             $cardinfoQuery = "UPDATE p1_8.payment SET UID ='$_SESSION[UID]]', card_name = '$cardName', card_number = '$cardNum', cvv = '$cvc', card_expiry = '$expDate', card_type = '$cardtype' WHERE UID='$_SESSION[UID]' ";
-            if (!$conn->query($cardinfoQuery)) {
-                $errorMsg = "Database error: " . $conn->error;
+            if (!$db->query($cardinfoQuery)) {
+                $errorMsg = "Database error: " . $db->error;
                 $success = false;
             }
         } else {
             $cardinfoQuery = "INSERT INTO p1_8.payment(UID, card_name, card_number, cvv, card_expiry, card_type) VALUES((SELECT UID FROM p1_8.user WHERE UID = '$_SESSION[UID]]'), '$cardName', '$cardNum', '$cvc', '$expDate', '$cardtype')";
 
             //Execute the query
-            if (!$conn->query($cardinfoQuery)) {
-                $errorMsg = "Database error: " . $conn->error;
+            if (!$db->query($cardinfoQuery)) {
+                $errorMsg = "Database error: " . $db->error;
                 $success = false;
             }
         }
     }
-    
+
     if(!$success){
         $cardinfoQuery = 0;
     }
 }
 
-$conn->close();
+$db->close();

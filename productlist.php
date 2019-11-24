@@ -40,6 +40,16 @@ header('Location:index.php');
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">  </script>
 <script scr="js/bootstrap.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
   </head>
   <body>
 <!---- header --->
@@ -75,11 +85,9 @@ header('Location:index.php');
          <?php
           require 'config.php';
             $sql = "SELECT * FROM item ";
-
             if ($result = mysqli_query($db, $sql)) {
               if(mysqli_num_rows($result) > 0){
                while ($row = mysqli_fetch_array($result)) {
-
                   echo '<div class="col-lg-6 text-center">';
                           //  echo $row["item_name"];
                   $item_id=$row["item_id"];
@@ -91,18 +99,15 @@ header('Location:index.php');
                   //$item_description=$row["item_description"];
                   //$item_features=$row["item_features"];
                   //echo $item_image;
-                    echo'<tr> 
-
+                    echo'<tr>
                     <td>'.$item_name.'</td>
                     <td>$'.$item_price.'</td>
                     <td>'.$item_quantity.'</td>
                     <td>'.$item_category.'</td>
                     <td>';
-
                     echo'<a class="btn btn-sm btn-danger"name="delproducts" data-toggle="modal" data-target="#delModalproduct'.$item_id.'">Delete</a>
                     </td>
                 </tr>';
-
                 echo'<div class="modal fade" id="delModalproduct'.$item_id.'">';
                    echo  '<form action="modal.php" method="post">';
                      echo '<input type="hidden" name="getitemid" value="'.$item_id.' " readonly>';
@@ -114,7 +119,6 @@ header('Location:index.php');
                                  <h1 class="modal-title">Removing Item </h1>
                              </div>
                          <div class="modal-body ">
-
                          <h3>Do you want to remove '.$item_name.'? </h3>
                            <div class="modal-footer">
                                <button type="submit"name="delproducts" class="btn btn-danger text-center">Remove</button>
@@ -151,6 +155,7 @@ header('Location:index.php');
         <div class="col-lg-10 "style="padding-left: 30px;">
 
           <h2>Customers</h2>
+          <input id="myInput" type="text" placeholder="Search...">
         </div>
 
        </div>
@@ -174,7 +179,6 @@ FROM history_payment a left join user b on a.UID =b.UID";
           if ($result = mysqli_query($db, $sqlcustomer)) {
             if(mysqli_num_rows($result) > 0){
               while ($row = mysqli_fetch_array($result)) {
-
                 echo '<div class="col-lg-4 text-center">';
                       //echo $row["item_name"];
                       $name=$row["first_name"];
@@ -183,18 +187,14 @@ FROM history_payment a left join user b on a.UID =b.UID";
                       $item_price=$row["item_price"];
                       $item_total=$row["total_price"];
                       $item_date=$row["date_purchased"];
-
-                        echo'<tr>
+                        echo'<tbody id="myTable"><tr>
                         <td>'.$name.'</td>
                         <td>'.$item_email.'</td>
                         <td>'.$item_name.'</td>
                         <td>$'.$item_price.'</td>
                         <td>$'.$item_total.'</td>
                         <td>'.$item_date.'</td>
-
-                        </tr>';
-
-
+                        </tr> </tbody>';
                            }
                            $result->free_result();
                            }
@@ -230,7 +230,7 @@ FROM history_payment a left join user b on a.UID =b.UID";
            		<div class="col-lg-12">
            			<div class="form-group">
    		        		<label>Product Name</label>
-   		        		<input type="text" name="item_name" class="form-control" placeholder="Enter Product Name">
+   		        		<input required type="text" name="item_name" class="form-control" placeholder="Enter Product Name">
    		        	</div>
            		</div>
            		<div class="col-lg-12">
@@ -245,7 +245,7 @@ FROM history_payment a left join user b on a.UID =b.UID";
            		<div class="col-lg-12">
            			<div class="form-group">
    		        		<label>Product Description</label>
-   		        		<textarea class="form-control" name="item_description" placeholder="Enter product desc"></textarea>
+   		        		<textarea required class="form-control" name="item_description" placeholder="Enter product desc"></textarea>
    		        	</div>
            		</div>
                <div class="col-lg-12">

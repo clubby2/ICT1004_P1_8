@@ -14,7 +14,7 @@ $password = mysqli_real_escape_string($db, $_POST['password']);
 //$password= password_hash($password, PASSWORD_BCRYPT);
 
   if (empty($email)) {
-      $erroremail ="Username is required";
+      $erroremail ="Email is required";
   }
   else if(!filter_var($email,FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})+$/")))){
   $erroremail = "Email is invalid.";
@@ -29,6 +29,7 @@ $usersql = mysqli_fetch_assoc($sqlquery);
 
 
 if (empty($usersql) || !password_verify($password, $usersql['password'])) { // if password is not verify show error
+
   $errorbth="Wrong email/password combination";
 }
 else{

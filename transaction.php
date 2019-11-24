@@ -1,4 +1,13 @@
 <?php
+if(isset($_POST['logout'])){
+  //session_start();
+//  echo "HALLLLLO";
+session_destroy();
+unset($_SESSION['email']);
+unset($_SESSION['role']);
+unset($_SESSION['UID']);
+header('Location:index.php');
+}
 session_start();
 if(!isset($_SESSION['email'])){
   header ('location:index.php');
@@ -75,7 +84,7 @@ $num = 0;
         echo "</tbody></table>";
     }
 ?>
-            <a href="index.php"/><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-home"> Home</span></button>
+            <a href="index.php"/><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-home">Home</span></button></a>
             </div>
     </article>
 </section>

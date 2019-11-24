@@ -1,6 +1,19 @@
 <?php
 session_start();
 if(isset($_SESSION['email'])){
+
+}
+else {
+
+$url= substr($_SERVER["REQUEST_URI"], strrpos($_SERVER["REQUEST_URI"], '/') + 1);
+   if($url=='payment.php'||$url=='process_payment.php'||$url=='userprofile.php'){
+    //  echo $_SERVER['REQUEST_URI'];
+    session_destroy();
+    unset($_SESSION['email']);
+    unset($_SESSION['role']);
+    unset($_SESSION['UID']);
+    header('Location:index.php');
+   }
 }
 if(isset($_POST['logout'])){
   //session_start();
@@ -21,7 +34,7 @@ unset($_SESSION['UID']);
     <title>Header</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-
+<link rel="icon" href="img/LOGOsmall.png" type="image/icon type">
 
     <script defer src="js/index.js"></script>
 
@@ -140,12 +153,12 @@ unset($_SESSION['UID']);
               <?php //echo $_SERVER['PHP_SELF'];?>
 
               <div class="form-group has-feedback">
-                <input type="email" class="form-control" placeholder="Email"name="email" required id="email">
+                <input type="email" class="form-control" placeholder="Email"name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$" required id="email">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 <small id="erroremail" class="form-text text-danger" hidden></small>
               </div>
               <div class="form-group has-feedback">
-                <input type="password" class="form-control" placeholder="Password"name="password"id="password" required>
+                <input type="password" class="form-control" placeholder="Password"name="password"id="password"  minlength="5" required>
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 <small id="errorpassword" class="form-text text-danger" hidden></small>
               </div>
@@ -186,24 +199,24 @@ unset($_SESSION['UID']);
             </div>
 
             <div class="form-group has-feedback">
-              <input type="text" class="form-control" placeholder="Last Name" name="last_name" id="last_name">
+              <input type="text" class="form-control" placeholder="Last Name" name="last_name" id="last_name" minlength="2">
 
               <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
 
             <div class="form-group has-feedback">
-              <input type="email" class="form-control"name="setusername" placeholder="Username/Email"id="setusername">
+              <input type="email" class="form-control"name="setusername"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$" placeholder="Email"id="setusername">
               <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
 
             <div class="form-group has-feedback">
-              <input type="password" class="form-control" placeholder="Password"name="setpw" id="setpw">
+              <input type="password" class="form-control" placeholder="Password"name="setpw" id="setpw" minlength="5">
 
               <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
 
             <div class="form-group has-feedback">
-              <input type="password" class="form-control" placeholder="Confirm Password" name="setpw1" id="setpw1">
+              <input type="password" class="form-control" placeholder="Confirm Password" name="setpw1" id="setpw1" minlength="5">
 
               <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>

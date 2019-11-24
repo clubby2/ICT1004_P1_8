@@ -1,3 +1,10 @@
+<?php
+if (!isset($_POST['pay'])) {
+header ('location:index.php');
+die();
+}
+ ?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -23,7 +30,7 @@
 <script scr="js/bootstrap.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   </head>
-  
+
   <body>
     <main>
         <section>
@@ -35,10 +42,8 @@
 <!-- content here -->
 <?php
     //cannot directly access process payment page without clicking pay button in payment page
-    if (!isset($_POST['pay'])) {
-    header ('location:index.php');
-    exit();
-    }
+
+
 
 $address = $postal = $card = $cardname = $cardnum = $expirydate = $CVV = "";
 $total = 0;
@@ -57,7 +62,7 @@ $userid =$_SESSION['UID'];
             $success = false;
         }
         else
-        {   
+        {
             $cardtype = sanitize_input($_POST["cardtype"]);
             $cardname = sanitize_input($_POST["cardname"]);
             $cardnum = sanitize_input($_POST["cardnum"]);
@@ -87,16 +92,16 @@ $userid =$_SESSION['UID'];
                     $cardnum = encrypt($cardnum, $encryptionkey);
                 }
             }
-            
+
             //validate expiry date
-            if (!preg_match("/^(0[1-9]|1[012]).([2-9][0-9])+$/", $expirydate)) 
+            if (!preg_match("/^(0[1-9]|1[012]).([2-9][0-9])+$/", $expirydate))
             {
                 $errorMsg .= "Expiry date is invalid. Please input the correct format MM/YY. <br>";
                 $success = false;
             }
-            
+
             //validate CVV
-            if (!preg_match("/^(?!000)[0-9]{3}$/", $CVV)) 
+            if (!preg_match("/^(?!000)[0-9]{3}$/", $CVV))
             {
                 $errorMsg .= "CVV code is invalid. Please ensure cvv code only contains 3 digits <br>";
                 $success = false;
@@ -111,19 +116,19 @@ $userid =$_SESSION['UID'];
                 $address = sanitize_input($_POST["address"]);
                 $postal = sanitize_input($_POST["code"]);
                 //validate address
-                if (!preg_match("/^[A-Za-z0-9\-\(\)#@(\) ]+$/", $address)) 
+                if (!preg_match("/^[A-Za-z0-9\-\(\)#@(\) ]+$/", $address))
                 {
                     $errorMsg .= "Invalid address format. <br>";
                     $success = false;
                 }
 
                 //validate postal code
-                if (!preg_match("/^[1-9][0-9]{5}$/", $postal)) 
+                if (!preg_match("/^[1-9][0-9]{5}$/", $postal))
                 {
                     $errorMsg .= "Invalid postal code format. <br>";
                     $success = false;
                 }
-            
+
                 //if all inputs validate then process payment
                 $payquery = "INSERT into payment (UID, card_name, card_number, cvv, card_expiry, card_type) VALUES ('$userid', '$cardname', '$cardnum', '$CVV', '$expirydate', '$cardtype')";
                 $addrquery = "UPDATE user SET address='$address', postal_code='$postal' WHERE UID=$userid";
@@ -204,14 +209,14 @@ $userid =$_SESSION['UID'];
             $address = sanitize_input($_POST["address"]);
             $postal = sanitize_input($_POST["code"]);
             //validate address
-            if (!preg_match("/^[A-Za-z0-9\-\(\)#@(\) ]+$/", $address)) 
+            if (!preg_match("/^[A-Za-z0-9\-\(\)#@(\) ]+$/", $address))
             {
                 $errorMsg .= "Invalid address format. <br>";
                 $success = false;
             }
 
             //validate postal code
-            if (!preg_match("/^[1-9][0-9]{5}$/", $postal)) 
+            if (!preg_match("/^[1-9][0-9]{5}$/", $postal))
             {
                 $errorMsg .= "Invalid postal code format. <br>";
                 $success = false;
@@ -220,7 +225,7 @@ $userid =$_SESSION['UID'];
             $addrquery = "UPDATE user SET address='$address', postal_code='$postal' WHERE UID=$userid";
             if (mysqli_query($db, $addrquery))
             {
-                
+
                 //get relevant data from cart and add to history payment table.
                 $query = "SELECT * FROM cart WHERE UID=$userid AND checks='1'";
                 $result = mysqli_query($db, $query);
@@ -272,8 +277,8 @@ $userid =$_SESSION['UID'];
                     echo "<a href='transaction.php'><button class='btn btn-default'>View Transaction History</button></a> ";
                     echo "<a href='index.php'><button class='btn btn-default'>Home</button></a><br>";
                 }
-            
-                
+
+
             }
             else{
                 echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Error, unsuccessful! </div>";
@@ -282,8 +287,8 @@ $userid =$_SESSION['UID'];
             }
         }
     }
-        
-    
+
+
     if (!($success))
     {
         echo "<div class='container-fluid'>";

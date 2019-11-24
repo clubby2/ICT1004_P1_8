@@ -1,4 +1,10 @@
-<html lang="en-US">
+<?php
+
+
+
+ ?>
+
+<html lang="en"  dir="ltr">
     <head>
         <title>Flex Out - Register</title>
     <meta charset="UTF-8">
@@ -46,6 +52,9 @@
                 {$error_message .= "Last Name is required. <br>";$success = false;}
             if (empty($_POST["setusername"]))
                 {$error_message .= "Email is required. <br>";$success = false;}
+              else if(!filter_var($_POST["setusername"],FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})+$/"))))
+                  {$error_message .= "Email is invalid. <br>";$success = false;}
+
             if (empty($_POST["setpw"]))
                 {$error_message .= "Password is required. <br>";$success = false;}
             if (empty($_POST["setpw1"]))

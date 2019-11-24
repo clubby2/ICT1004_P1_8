@@ -23,9 +23,7 @@
    <div class="container-fluid bg-2 text-center" ID="WHAT">
      <h3 class="margin" >What Are We?</h3>
      <p>We are an idealist. We has tons of great ideas all of the time. Our success has come from learning how to focus on one big idea at a time and incorporate smaller ideas into the larger one. We are confident that we will create a ton of innovative gadgets because we has the discipline to throw all of our time, energy, expertise, and resources into each idea at the appropriate time. </p>
-     <a href="#" class="btn btn-default btn-lg">
-       <span class="glyphicon glyphicon-search"></span> Search
-     </a>
+     
    </div>
 
    <!-- Third Container (Grid) -->

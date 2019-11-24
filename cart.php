@@ -7,6 +7,7 @@ $checking= isset($_POST['check']);
 //echo $checking;
   if($checking==1){ // if the checkbox  click change it to 1 so that can bill to the history table
     $sqlup="UPDATE cart SET checks=1  WHERE CID= $cids";
+  //  $_SESSION['cart']=$cids;
     mysqli_query($db, $sqlup);
 
 $db->close();
@@ -14,9 +15,30 @@ $db->close();
   else{
   mysqli_query($db, "UPDATE cart SET checks=0  WHERE CID=$cids");
   $db->close();
+  //  unset($_SESSION['cart']);
   }
 }
+/*
+if (isset($_POST['toPayment'])) { //check if item is tick or not
+$userid=$_SESSION['UID'];
+require 'config.php';
 
+$idsql= "SELECT * FROM cart WHERE checks = 1 AND UID=$userid"; // query cart item and add
+  $sqlitem= mysqli_query($db,$idsql);
+  $checkitem = mysqli_fetch_assoc($sqlitem);
+  if (empty($checkitem)) {
+    echo '<script language="javascript">';
+    echo 'alert("Please check out an item!")';
+    echo '</script>';
+  //  header ('location:cart.php');
+   //echo '<input type="hidden" name="errorcart" value="">
+   //<small id="errorcart" class="form-text text-danger" hidden></small>  </form>';
+  }
+  else{
+        header ('location:payment.php');
+  }
+}
+*/
 
  ?>
 
@@ -159,7 +181,7 @@ where a.UID = $userid GROUP BY b.item_id";
        echo  '<form action="payment.php" method="post">
       <button type="submit" class="btn btn-primary btn-lg" name="toPayment">Payment</button>
         </form>';
-  
+
          $result->free_result();
            }
            else{

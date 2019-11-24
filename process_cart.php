@@ -1,4 +1,9 @@
 <?php
+if (!isset($_POST['btntocart'])) {
+echo "test";  
+  header ("location:index.php");
+  exit;
+}
 session_start();
 require 'config.php';
 $flag = false;
@@ -39,7 +44,7 @@ $idsql= "SELECT * FROM cart WHERE item_id = $item_id AND UID=$userid"; // query 
   //  echo "can add";
   $newitemid=$item['item_id'];
   $maintotalquantity=$item['item_quantity']-$item_quantity;
-echo $newitemid;
+//echo $newitemid;
     $sql = "INSERT INTO cart (UID,item_id,item_quantity,item_price,item_name) VALUES ($userid,$item_id,'$item_quantity','$item_price','$item_name')";
   mysqli_query($db, $sql);  // add sql
   $subsql ="UPDATE item SET item_quantity=$maintotalquantity WHERE item_id=$newitemid";
@@ -56,6 +61,9 @@ echo $newitemid;
     }
   }
 }
+
+
+
  ?>
  <!DOCTYPE html>
  <html lang="en" dir="ltr">

@@ -102,7 +102,7 @@
 
                 <div class="text-center" >
                     <p >
-                            Insert Description Here.
+                            Deal or dud? Alabama news station tests out Flex Tape.
                     </p>
                 </div>
 
@@ -123,7 +123,7 @@
 
                 <div class="text-center" >
                     <p >
-                            Insert Description Here.
+                            Does Flex Tape Works?
                     </p>
                 </div>
 
@@ -142,7 +142,7 @@
             <br>
                 <div class="text-center" >
                     <p >
-                        Insert Description Here.
+                        Detriot news station reviews Flex Tape with a variety of tests.
                     </p>
                 </div>
 
@@ -175,7 +175,7 @@
 
                 <div class="text-center" >
                     <p >
-                            Insert Description Here.
+                            DIY.
                     </p>
                 </div>
 
@@ -195,7 +195,7 @@
 
                 <div class="text-center" >
                     <p >
-                            Insert Description Here.
+                            Can Flex Seal hold up to the toughest challenges?
                     </p>
                 </div>
 
@@ -214,7 +214,7 @@
 
                 <div class="text-center" >
                     <p >
-                            Insert Description Here.
+                            More reviews.
                     </p>
                 </div>
 
@@ -245,10 +245,10 @@
    <!--- footer--->
 
    <!--- end footer--->
-<?php include "footer.php" ?>
+
 
 
 </div>
-
+<?php include "footer.php" ?>
 </body>
 </html>
